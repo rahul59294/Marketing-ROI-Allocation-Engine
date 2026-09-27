@@ -1,0 +1,304 @@
+{
+  "portfolio": {
+    "total_spend": 58705.23,
+    "total_approved": 1079,
+    "total_clicks": 38165,
+    "total_impressions": 213434828,
+    "portfolio_cpa": 54.41,
+    "net_spend_change": -3769.29,
+    "delta_approved": 24.1435
+  },
+  "age_gender": [
+    {
+      "age": "30-34",
+      "gender": "F",
+      "spend": 7611.48,
+      "approved": 195,
+      "clicks": 5099,
+      "impressions": 31571576,
+      "segment": "30-34 F",
+      "cpa": 39.03,
+      "shift_pct": 15,
+      "rationale": "Strong performer (CPA .03, 39% more efficient than avg). Solid volume and conversion justify scale-up."
+    },
+    {
+      "age": "30-34",
+      "gender": "M",
+      "spend": 7640.92,
+      "approved": 299,
+      "clicks": 4384,
+      "impressions": 36421443,
+      "segment": "30-34 M",
+      "cpa": 25.55,
+      "shift_pct": 25,
+      "rationale": "Highest converting cohort (6.82% CVR) at lowest CPA (.55). Scaled up safely within marginal bounds."
+    },
+    {
+      "age": "35-39",
+      "gender": "F",
+      "spend": 6061.35,
+      "approved": 95,
+      "clicks": 4161,
+      "impressions": 21439505,
+      "segment": "35-39 F",
+      "cpa": 63.8,
+      "shift_pct": -10,
+      "rationale": "Mildly lagging efficiency (CPA .80 is 17% worse than avg). Trim slightly to reallocate toward younger cohorts."
+    },
+    {
+      "age": "35-39",
+      "gender": "M",
+      "spend": 5051.08,
+      "approved": 112,
+      "clicks": 2933,
+      "impressions": 20665139,
+      "segment": "35-39 M",
+      "cpa": 45.1,
+      "shift_pct": 15,
+      "rationale": "Solid performance (CPA .10, 21% more efficient than avg). Expand budget to capture incremental buyers."
+    },
+    {
+      "age": "40-44",
+      "gender": "F",
+      "spend": 7396.58,
+      "approved": 93,
+      "clicks": 5177,
+      "impressions": 23396175,
+      "segment": "40-44 F",
+      "cpa": 79.53,
+      "shift_pct": -20,
+      "rationale": "Low conversion efficiency (1.80% CVR, .53 CPA). Shift spend toward responsive 30-34 groups."
+    },
+    {
+      "age": "40-44",
+      "gender": "M",
+      "spend": 4193.15,
+      "approved": 77,
+      "clicks": 2559,
+      "impressions": 16208132,
+      "segment": "40-44 M",
+      "cpa": 54.46,
+      "shift_pct": 0,
+      "rationale": "Benchmark performer. CPA (.46) aligns with portfolio average. Maintain current spending level."
+    },
+    {
+      "age": "45-49",
+      "gender": "F",
+      "spend": 13433.21,
+      "approved": 112,
+      "clicks": 9441,
+      "impressions": 38455591,
+      "segment": "45-49 F",
+      "cpa": 119.94,
+      "shift_pct": -30,
+      "rationale": "Unprofitable cohort (CPA .94, 1.19% CVR). Enforce maximum capped cut (-30%) to curb waste."
+    },
+    {
+      "age": "45-49",
+      "gender": "M",
+      "spend": 7317.46,
+      "approved": 96,
+      "clicks": 4411,
+      "impressions": 25277267,
+      "segment": "45-49 M",
+      "cpa": 76.22,
+      "shift_pct": -20,
+      "rationale": "Low conversion rate (2.18%) and high CPA (.22). Reduce ad exposure while retaining brand presence."
+    }
+  ],
+  "interest": [
+    {
+      "interest_grouped": "16",
+      "spend": 8084.91,
+      "approved": 141,
+      "clicks": 5144,
+      "impressions": 31809524,
+      "shift_pct": 0,
+      "rationale": "Largest single interest pool; performance (.34 CPA) is near benchmark. Maintain spend.",
+      "cpa": 57.34
+    },
+    {
+      "interest_grouped": "27",
+      "spend": 5176.17,
+      "approved": 54,
+      "clicks": 3409,
+      "impressions": 16352527,
+      "shift_pct": -25,
+      "rationale": "Near breakeven / low efficiency (.86 CPA). Aggressive trim.",
+      "cpa": 95.85
+    },
+    {
+      "interest_grouped": "10",
+      "spend": 5086.38,
+      "approved": 91,
+      "clicks": 3317,
+      "impressions": 17989844,
+      "shift_pct": 0,
+      "rationale": "Near portfolio benchmark (.89 CPA). Maintain spend.",
+      "cpa": 55.89
+    },
+    {
+      "interest_grouped": "29",
+      "spend": 5045.19,
+      "approved": 132,
+      "clicks": 3315,
+      "impressions": 18768653,
+      "shift_pct": 20,
+      "rationale": "Top tier interest (CPA .22, 42% above benchmark). Scale up.",
+      "cpa": 38.22
+    },
+    {
+      "interest_grouped": "28",
+      "spend": 3205.85,
+      "approved": 42,
+      "clicks": 2025,
+      "impressions": 10959830,
+      "shift_pct": -15,
+      "rationale": "High CPA (.33, 40% worse than avg). Moderate trim.",
+      "cpa": 76.33
+    },
+    {
+      "interest_grouped": "15",
+      "spend": 2597.26,
+      "approved": 63,
+      "clicks": 1609,
+      "impressions": 10745856,
+      "shift_pct": 20,
+      "rationale": "High conversion rate (3.92%) and low CPA (.23). Scale up.",
+      "cpa": 41.23
+    },
+    {
+      "interest_grouped": "63",
+      "spend": 2484.06,
+      "approved": 34,
+      "clicks": 1675,
+      "impressions": 8365640,
+      "shift_pct": -15,
+      "rationale": "Low conversion rate (2.03%, .06 CPA). Moderate trim.",
+      "cpa": 73.06
+    },
+    {
+      "interest_grouped": "18",
+      "spend": 2425.07,
+      "approved": 33,
+      "clicks": 1524,
+      "impressions": 8646488,
+      "shift_pct": -15,
+      "rationale": "Low conversion rate (2.17%, .49 CPA). Moderate trim.",
+      "cpa": 73.49
+    },
+    {
+      "interest_grouped": "32",
+      "spend": 1970.53,
+      "approved": 35,
+      "clicks": 1138,
+      "impressions": 6455261,
+      "shift_pct": 0,
+      "rationale": "Near portfolio benchmark (.30 CPA). Maintain spend.",
+      "cpa": 56.3
+    },
+    {
+      "interest_grouped": "20",
+      "spend": 1960.77,
+      "approved": 47,
+      "clicks": 1234,
+      "impressions": 6899907,
+      "shift_pct": 20,
+      "rationale": "Strong efficiency (CPA .72, 30% above avg). Scale up.",
+      "cpa": 41.72
+    },
+    {
+      "interest_grouped": "19",
+      "spend": 1940.36,
+      "approved": 33,
+      "clicks": 1188,
+      "impressions": 6083217,
+      "shift_pct": 0,
+      "rationale": "Near portfolio benchmark (.80 CPA). Maintain spend.",
+      "cpa": 58.8
+    },
+    {
+      "interest_grouped": "25",
+      "spend": 1603.86,
+      "approved": 19,
+      "clicks": 1066,
+      "impressions": 5251719,
+      "shift_pct": -15,
+      "rationale": "High CPA (.41). Moderate trim.",
+      "cpa": 84.41
+    },
+    {
+      "interest_grouped": "26",
+      "spend": 1591.77,
+      "approved": 23,
+      "clicks": 1113,
+      "impressions": 4868639,
+      "shift_pct": -15,
+      "rationale": "Below average efficiency (.21 CPA). Moderate trim.",
+      "cpa": 69.21
+    },
+    {
+      "interest_grouped": "64",
+      "spend": 1486.13,
+      "approved": 27,
+      "clicks": 989,
+      "impressions": 5085460,
+      "shift_pct": 0,
+      "rationale": "In line with portfolio benchmark (.04 CPA). Maintain spend.",
+      "cpa": 55.04
+    },
+    {
+      "interest_grouped": "22",
+      "spend": 1039.86,
+      "approved": 12,
+      "clicks": 717,
+      "impressions": 3965401,
+      "shift_pct": -15,
+      "rationale": "High CPA (.66). Moderate trim.",
+      "cpa": 86.65
+    },
+    {
+      "interest_grouped": "Other",
+      "spend": 13007.06,
+      "approved": 293,
+      "clicks": 8702,
+      "impressions": 51186862,
+      "shift_pct": 10,
+      "rationale": "Diversified pool of 25 niche interests with high aggregate efficiency (.39 CPA). Moderate scale.",
+      "cpa": 44.39
+    }
+  ],
+  "regression_1178": {
+    "intercept": 0.3208,
+    "slope": 0.01206,
+    "r2": 0.3153,
+    "p_value": "3.25e-53",
+    "avg_cpa": 63.83,
+    "marginal_cpa": 82.89
+  },
+  "regression_notes": {
+    "camp_916": {
+      "n": 54,
+      "spend": 149.71,
+      "slope": 0.0105,
+      "p_value": 0.5481
+    },
+    "camp_936": {
+      "n": 464,
+      "spend": 2893.37,
+      "slope": -0.00057,
+      "p_value": 0.7139
+    }
+  },
+  "view_through": {
+    "zero_clicks_ads": 207,
+    "zero_clicks_conversions": 204,
+    "approved_conversions": 71,
+    "total_impressions": 488881,
+    "pct_of_all_ads": 18.1,
+    "zero_click_inquiries": 212,
+    "zero_click_inquiry_ads": 204,
+    "zero_click_purchases": 76,
+    "zero_click_purchase_ads": 71
+  }
+}

@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marketing Campaign ROI & Allocation Dashboard</title>
+
+  <!-- Google Fonts: Sora (Headings) & Inter (Body/Data) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --bg-page: #F6F5F3;
+      --bg-card: #FFFFFF;
+      --bg-subtle: #F9F8F6;
+      --bg-muted: #EDE9E3;
+      --border-subtle: rgba(25, 27, 31, 0.05);
+
+      --text-primary: #181A1F;
+      --text-secondary: #5F6675;
+      --text-muted: #8D94A3;
+
+      /* Distinct Tiering Colors */
+      --tier-portfolio: #4C5FD5; /* Indigo / Slate Blue */
+      --tier-top3: #F59E0B;      /* Warm Amber / Gold */
+      --tier-hero: #FF6B4A;      /* Vibrant Signature Coral */
+
+      --accent-coral: #FF6B4A;
+      --accent-coral-hover: #F25734;
+      --accent-coral-tint: rgba(255, 107, 74, 0.09);
+      --accent-coral-light: #FFF2EE;
+
+      --color-dark: #15181E;
+      --color-dark-surface: #20242D;
+      
+      --color-emerald: #1F9D77;
+      --color-emerald-tint: rgba(31, 157, 119, 0.10);
+
+      --radius-card: 24px;
+      --radius-md: 14px;
+      --radius-pill: 9999px;
+
+      --shadow-card: 0 10px 30px rgba(25, 27, 31, 0.035), 0 2px 6px rgba(25, 27, 31, 0.02);
+      --shadow-hover: 0 16px 36px rgba(25, 27, 31, 0.06), 0 4px 10px rgba(25, 27, 31, 0.025);
+      --shadow-coral: 0 12px 28px rgba(255, 107, 74, 0.28);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.45;
+      padding: 28px 36px 60px;
+      max-width: 1440px;
+      margin: 0 auto;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4, .brand-title {
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      color: var(--text-primary);
+    }
+
+    /* Header Bar */
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .header-branding {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-avatar {
+      width: 42px;
+      height: 42px;
+      background: var(--color-dark);
+      color: #FFFFFF;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      box-shadow: 0 4px 12px rgba(21, 24, 30, 0.15);
+    }
+
+    .brand-text h1 {
+      font-size: 20px;
+      line-height: 1.2;
+    }
+
+    .brand-text p {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+    }
+
+    /* Order Value Controller Pill */
+    .order-controller-pill {
+      background: var(--bg-card);
+      padding: 8px 12px 8px 18px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-card);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .controller-labels {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .controller-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .assumed-tag {
+      background: var(--accent-coral-light);
+      color: var(--accent-coral);
+      font-size: 10px;
+      font-weight: 600;
+      padding: 1px 7px;
+      border-radius: var(--radius-pill);
+    }
+
+    .controller-caption {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .slider-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .slider-wrap span {
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .range-input {
+      width: 140px;
+      height: 6px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-muted);
+      outline: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+    }
+
+    .range-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent-coral);
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(255, 107, 74, 0.45);
+      transition: transform 0.15s ease;
+    }
+
+    .range-input::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    .val-display-pill {
+      background: var(--color-dark);
+      color: #FFFFFF;
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 13.5px;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      min-width: 62px;
+      text-align: center;
+    }
+
+    /* Global Bento Grid Alignment */
+    .bento-row {
+      display: grid;
+      gap: 20px;
+      margin-bottom: 24px;
+      width: 100%;
+    }
+
+    /* Hero Row: 4 equal cards */
+    .bento-hero-row {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    @media (max-width: 1180px) {
+      .bento-hero-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 680px) {
+      .bento-hero-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Common Card Styling */
+    .bento-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-card);
+      border: 1px solid var(--border-subtle);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .bento-card:hover {
+      box-shadow: var(--shadow-hover);
+    }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .card-label {
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .icon-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent-coral-tint);
+      color: var(--accent-coral);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .hero-num-huge {
+      font-family: 'Sora', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+
+    .hero-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    /* Hero Card 1 footer split */
+    .card-foot-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding-top: 14px;
+      margin-top: 14px;
+      border-top: 1px solid var(--bg-muted);
+    }
+
+    .foot-stat-num {
+      font-family: 'Sora', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .foot-stat-lbl {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    /* Hero Card 2: Standout Coral */
+    .bento-card-coral {
+      background: linear-gradient(135deg, #FF6B4A 0%, #FA532E 100%);
+      color: #FFFFFF;
+      box-shadow: var(--shadow-coral);
+      border: none;
+    }
+
+    .bento-card-coral .card-label {
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    .bento-card-coral .hero-num-huge {
+      color: #FFFFFF;
+    }
+
+    .bento-card-coral .hero-sub {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .coral-save-tag {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.22);
+      backdrop-filter: blur(8px);
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #FFFFFF;
+      margin-top: 14px;
+      width: fit-content;
+    }
+
+    /* Hero Card 3: Dark Circular Gauge */
+    .bento-card-dark {
+      background: var(--color-dark);
+      color: #FFFFFF;
+      align-items: center;
+      text-align: center;
+      justify-content: center;
+      border: none;
+    }
+
+    .gauge-box {
+      position: relative;
+      width: 104px;
+      height: 104px;
+      margin-bottom: 10px;
+    }
+
+    .gauge-svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .gauge-bg-ring {
+      fill: none;
+      stroke: var(--color-dark-surface);
+      stroke-width: 8;
+    }
+
+    .gauge-val-ring {
+      fill: none;
+      stroke: var(--accent-coral);
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 282.74;
+      stroke-dashoffset: 70;
+      transition: stroke-dashoffset 0.5s ease;
+    }
+
+    .gauge-center-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      color: #FFFFFF;
+    }
+
+    .gauge-title {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #FFFFFF;
+    }
+
+    .gauge-caption {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Pill Badges */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 9px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .badge-cpc {
+      background: var(--accent-coral-tint);
+      color: var(--accent-coral);
+    }
+
+    /* Row 2: Reallocation & Demographic Tiering (2-col Bento) */
+    .bento-middle-row {
+      grid-template-columns: 360px 1fr;
+    }
+
+    @media (max-width: 1100px) {
+      .bento-middle-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Concentric Radial Progress Rings Card */
+    .radial-top-stat-block {
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--bg-muted);
+    }
+
+    .radial-stat-lbl {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .radial-stat-val {
+      font-family: 'Sora', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin: 2px 0 1px;
+      line-height: 1.15;
+    }
+
+    .radial-stat-caption {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+    }
+
+    .radial-rings-container {
+      width: 100%;
+      height: 170px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 6px 0 12px;
+      position: relative;
+    }
+
+    .radial-svg {
+      width: 160px;
+      height: 160px;
+      transform: rotate(-90deg);
+    }
+
+    .ring-track {
+      fill: none;
+      stroke: #EDE8E2;
+      stroke-linecap: round;
+    }
+
+    .ring-progress {
+      fill: none;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.5s ease;
+    }
+
+    .concentric-item-list {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      border-top: 1px solid var(--bg-muted);
+      padding-top: 14px;
+      margin-bottom: 12px;
+    }
+
+    .concentric-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .concentric-row-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot-marker {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    /* Separate CPA Callout below concentric rings */
+    .hero-cpa-callout {
+      background: var(--bg-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* Tabbed Reallocation Engine Card */
+    .tabbed-engine-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-card);
+      border: 1px solid var(--border-subtle);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+      min-width: 0;
+    }
+
+    .engine-head-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .nav-pills {
+      display: flex;
+      background: var(--bg-subtle);
+      padding: 4px;
+      border-radius: var(--radius-pill);
+      gap: 4px;
+    }
+
+    .nav-pill-btn {
+      border: none;
+      background: transparent;
+      padding: 7px 16px;
+      border-radius: var(--radius-pill);
+      font-family: 'Inter', sans-serif;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .nav-pill-btn.active {
+      background: var(--color-dark);
+      color: #FFFFFF;
+      box-shadow: 0 2px 8px rgba(21, 24, 30, 0.15);
+    }
+
+    .lens-info-pill {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      background: var(--bg-subtle);
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+    }
+
+    /* 2-Column Split inside Reallocation Lens */
+    .lens-inner-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 20px;
+      min-width: 0;
+    }
+
+    @media (max-width: 980px) {
+      .lens-inner-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .bar-chart-container {
+      height: 380px;
+      position: relative;
+      min-width: 0;
+    }
+
+    /* Styled Card-Rows for Table */
+    .cards-table-scroll {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 400px;
+      overflow-y: auto;
+      padding-right: 4px;
+      min-width: 0;
+    }
+
+    .cards-table-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+    .cards-table-scroll::-webkit-scrollbar-thumb {
+      background: var(--bg-muted);
+      border-radius: 4px;
+    }
+
+    .cohort-card-row {
+      background: var(--bg-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      display: grid;
+      grid-template-columns: 120px 1fr 75px 70px 75px;
+      align-items: center;
+      gap: 12px;
+      transition: background 0.15s ease;
+      min-width: 0;
+    }
+
+    .cohort-card-row:hover {
+      background: #F1ECE6;
+    }
+
+    .col-cohort strong {
+      font-size: 13px;
+      color: var(--text-primary);
+      display: block;
+      white-space: nowrap;
+    }
+
+    .col-cohort span {
+      font-size: 11px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .col-metrics {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      line-height: 1.35;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .col-roas {
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text-primary);
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .col-roas small {
+      display: block;
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .shift-tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      font-weight: 700;
+      font-size: 11.5px;
+      white-space: nowrap;
+    }
+
+    .shift-pos {
+      background: var(--color-emerald-tint);
+      color: var(--color-emerald);
+    }
+
+    .shift-neg {
+      background: rgba(255, 107, 74, 0.12);
+      color: var(--accent-coral);
+    }
+
+    .shift-zero {
+      background: var(--bg-muted);
+      color: var(--text-secondary);
+    }
+
+    .col-new-spend {
+      text-align: right;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+
+    /* Row 3: Campaign Diminishing Returns (2-col Bento) */
+    .bento-bottom-row {
+      grid-template-columns: 1fr 360px;
+    }
+
+    @media (max-width: 1080px) {
+      .bento-bottom-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .scatter-chart-wrap {
+      height: 340px;
+      position: relative;
+      margin-top: 10px;
+      min-width: 0;
+    }
+
+    .diminishing-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .side-stat-box {
+      background: var(--bg-card);
+      border-radius: var(--radius-card);
+      border: 1px solid var(--border-subtle);
+      padding: 20px 22px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .box-stat-coral {
+      font-family: 'Sora', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--accent-coral);
+      margin-bottom: 2px;
+    }
+
+    .guidance-banner {
+      background: var(--bg-subtle);
+      border-left: 3px solid var(--accent-coral);
+      padding: 12px 14px;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      margin-top: 10px;
+    }
+
+    .guidance-banner strong {
+      font-size: 12.5px;
+      color: var(--text-primary);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .guidance-banner p {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--bg-muted);
+      display: flex;
+      justify-content: space-between;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Bar -->
+  <header class="dashboard-header">
+    <div class="header-branding">
+      <div class="brand-avatar">M</div>
+      <div class="brand-text">
+        <h1>Marketing Campaign ROI Dashboard</h1>
+        <p>Capital Allocation &amp; Diminishing Returns Engine • Authentic Facebook Ads Dataset</p>
+      </div>
+    </div>
+
+    <!-- Order Value Controller -->
+    <div class="order-controller-pill">
+      <div class="controller-labels">
+        <div class="controller-title">
+          <span>Assumed Order Value</span>
+          <span class="assumed-tag">Assumed Parameter</span>
+        </div>
+        <span class="controller-caption">Not in raw source data • Live recalibration</span>
+      </div>
+
+      <div class="slider-wrap">
+        <span>$30</span>
+        <input type="range" id="orderValueSlider" class="range-input" min="30" max="200" step="5" value="100">
+        <span>$200</span>
+      </div>
+
+      <div class="val-display-pill" id="orderValueDisplay">$100</div>
+    </div>
+  </header>
+
+  <!-- Bento Grid Hero (4 Cards) -->
+  <section class="bento-row bento-hero-row">
+    
+    <!-- Hero Card 1: Gross Revenue -->
+    <div class="bento-card">
+      <div>
+        <div class="card-head">
+          <span class="card-label">Portfolio Gross Revenue</span>
+          <div class="icon-circle">📈</div>
+        </div>
+        <div class="hero-num-huge" id="kpiGrossRevenue">$107,900</div>
+        <div class="hero-sub">1,079 closed sales @ <span id="subOrderVal">$100</span> assumed order value</div>
+      </div>
+
+      <div class="card-foot-split">
+        <div>
+          <div class="foot-stat-num">$58,705</div>
+          <div class="foot-stat-lbl">Total Spend (1,143 ads)</div>
+        </div>
+        <div>
+          <div class="foot-stat-num" id="kpiNetProfit">$49,195</div>
+          <div class="foot-stat-lbl">Baseline Profit</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero Card 2: Standout Coral Card (Profit Lift) -->
+    <div class="bento-card bento-card-coral">
+      <div>
+        <div class="card-head">
+          <span class="card-label">Recommended Reallocation</span>
+          <span style="font-size: 18px;">⚡</span>
+        </div>
+        <div class="hero-num-huge" id="kpiProfitLift">+$6,184</div>
+        <div class="hero-sub" id="kpiProfitLiftSub">+12.6% net profit increase</div>
+      </div>
+      <div>
+        <div class="coral-save-tag">
+          <span>Saves $3,769 in ad budget</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero Card 3: Dark Circular Gauge (Blended ROAS) -->
+    <div class="bento-card bento-card-dark">
+      <div class="gauge-box">
+        <svg class="gauge-svg" viewBox="0 0 100 100">
+          <circle class="gauge-bg-ring" cx="50" cy="50" r="45"></circle>
+          <circle id="roasGaugeCircle" class="gauge-val-ring" cx="50" cy="50" r="45"></circle>
+        </svg>
+        <div class="gauge-center-text" id="kpiRoasGaugeVal">1.84x</div>
+      </div>
+      <div class="gauge-title">Blended Portfolio ROAS</div>
+      <div class="gauge-caption" id="kpiBreakevenNotice">Breakeven CPA: $100.00</div>
+    </div>
+
+    <!-- Hero Card 4: View-Through Attribution (Strictly Delineated Inquiries vs Purchases) -->
+    <div class="bento-card">
+      <div>
+        <div class="card-head">
+          <span class="card-label">View-Through Attribution</span>
+          <div class="icon-circle">🎯</div>
+        </div>
+        <div class="hero-num-huge">76 Purchases</div>
+        <div class="hero-sub">
+          Across 207 zero-click ads: <strong>212 inquiries (204 ads)</strong> resulted in <strong>76 approved purchases (71 ads)</strong> with $0 spend.
+        </div>
+      </div>
+
+      <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--bg-muted); display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <div style="font-size: 11px; color: var(--text-secondary);">Zero-Click Inquiries</div>
+          <div style="font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700; color: var(--text-primary);">212 Leads</div>
+        </div>
+        <div class="status-badge badge-cpc">488k Impressions</div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Bento Grid Row 2: Concentric Demographic Card + Tabbed Reallocation Engine -->
+  <section class="bento-row bento-middle-row">
+    
+    <!-- Left Card: Concentric Radial Progress Rings with Distinct Tri-Color Palette & External Text -->
+    <div class="bento-card">
+      <div>
+        <div class="card-head" style="margin-bottom: 10px;">
+          <div>
+            <h3 style="font-size: 15px;">Demographic Tiering</h3>
+            <span style="font-size: 11.5px; color: var(--text-muted);">Revenue concentration by cohort tier</span>
+          </div>
+          <span class="status-badge" style="background: var(--bg-subtle); color: var(--text-secondary);">3-Tier Rings</span>
+        </div>
+
+        <!-- External Stat Block (Cleanly outside the circles) -->
+        <div class="radial-top-stat-block">
+          <div class="radial-stat-lbl">Portfolio Gross Revenue</div>
+          <div class="radial-stat-val" id="concOuterRevenue">$107,900</div>
+          <div class="radial-stat-caption">Across 1,079 orders @ $<span class="concOrderValDisplay">100</span> assumed value</div>
+        </div>
+
+        <!-- Pure Concentric Rings (Clean inside, completely free of text!) -->
+        <div class="radial-rings-container">
+          <svg class="radial-svg" viewBox="0 0 160 160">
+            <!-- Ring 1 (Outer): Portfolio Total -> Indigo (#4C5FD5, r = 66, C = 414.69) -->
+            <circle class="ring-track" cx="80" cy="80" r="66" stroke-width="8.5"></circle>
+            <circle id="ringProgressL1" class="ring-progress" cx="80" cy="80" r="66" stroke-width="8.5" stroke="#4C5FD5" stroke-dasharray="414.69" stroke-dashoffset="0"></circle>
+
+            <!-- Ring 2 (Middle): Top 3 Cohorts -> Warm Amber (#F59E0B, r = 48, C = 301.59, 56.2% -> offset 132.10) -->
+            <circle class="ring-track" cx="80" cy="80" r="48" stroke-width="8.5"></circle>
+            <circle id="ringProgressL2" class="ring-progress" cx="80" cy="80" r="48" stroke-width="8.5" stroke="#F59E0B" stroke-dasharray="301.59" stroke-dashoffset="132.10"></circle>
+
+            <!-- Ring 3 (Inner): Men 30-34 Hero Cohort -> Vibrant Coral (#FF6B4A, r = 30, C = 188.50, 27.7% -> offset 136.29) -->
+            <circle class="ring-track" cx="80" cy="80" r="30" stroke-width="8.5"></circle>
+            <circle id="ringProgressL3" class="ring-progress" cx="80" cy="80" r="30" stroke-width="8.5" stroke="#FF6B4A" stroke-dasharray="188.50" stroke-dashoffset="136.29"></circle>
+          </svg>
+        </div>
+      </div>
+
+      <div>
+        <!-- Legend with 3 Totally Distinct Colors -->
+        <div class="concentric-item-list">
+          <div class="concentric-row">
+            <div class="concentric-row-left">
+              <span class="dot-marker" style="background: #4C5FD5;"></span>
+              <span style="font-weight: 500;">Total Portfolio Gross</span>
+            </div>
+            <div>
+              <strong id="concLegL1" style="color: #4C5FD5;">$107,900</strong>
+              <span style="color: var(--text-muted); font-size: 11px; margin-left: 4px;">(100%)</span>
+            </div>
+          </div>
+
+          <div class="concentric-row">
+            <div class="concentric-row-left">
+              <span class="dot-marker" style="background: #F59E0B;"></span>
+              <span style="font-weight: 500;">Top 3 Cohorts (30–39)</span>
+            </div>
+            <div>
+              <strong id="concLegL2" style="color: #D97706;">$60,600</strong>
+              <span style="color: var(--text-muted); font-size: 11px; margin-left: 4px;">(56%)</span>
+            </div>
+          </div>
+
+          <div class="concentric-row">
+            <div class="concentric-row-left">
+              <span class="dot-marker" style="background: #FF6B4A;"></span>
+              <span style="font-weight: 500;">Men 30–34 (Hero Cohort)</span>
+            </div>
+            <div>
+              <strong id="concLegL3" style="color: #FF6B4A;">$29,900</strong>
+              <span style="color: var(--accent-coral); font-weight: 700; font-size: 11px; margin-left: 4px;">(28%)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Separate Unit-Cost Metric Callout (CPA distinct from Revenue rings) -->
+        <div class="hero-cpa-callout">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <span style="font-size: 10.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Top Cohort Unit Cost</span>
+              <div style="font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 700; color: var(--accent-coral);">Men 30-34 CPA: $25.55</div>
+            </div>
+            <span class="status-badge" style="background: var(--color-emerald-tint); color: var(--color-emerald); font-weight: 700;">-53% vs Avg CPA</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-secondary); margin-top: 3px;">
+            Generates 6.82% conversion rate at lowest CPA in the portfolio ($25.55 vs $54.41 portfolio average).
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Card: Tabbed Reallocation Engine -->
+    <div class="tabbed-engine-card">
+      <div class="engine-head-bar">
+        <div class="nav-pills">
+          <button class="nav-pill-btn active" onclick="switchLensTab('age_gender')">Lens A: Age × Gender</button>
+          <button class="nav-pill-btn" onclick="switchLensTab('interest')">Lens B: Interest Segments</button>
+        </div>
+        <span class="lens-info-pill">Independent lenses on same $58.7k budget (not additive)</span>
+      </div>
+
+      <div class="lens-inner-grid">
+        <!-- Chart -->
+        <div>
+          <div style="font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">
+            Segment ROAS vs Portfolio Benchmark (<span id="chartBenchmarkVal">1.84x</span>)
+          </div>
+          <div class="bar-chart-container">
+            <canvas id="lensChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Cards List -->
+        <div>
+          <div style="font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">
+            Recommended Reallocation Directives (Capped within ±30%)
+          </div>
+          <div class="cards-table-scroll" id="tableCardsContainer">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Bento Grid Row 3: Diminishing Returns & Marginal Economics (2-col Bento) -->
+  <section class="bento-row bento-bottom-row">
+    
+    <!-- Scatter Plot Card -->
+    <div class="bento-card">
+      <div class="card-head" style="margin-bottom: 4px;">
+        <div>
+          <h3 style="font-size: 15px;">Campaign 1178 Ad-Level Response Curve</h3>
+          <span style="font-size: 11.5px; color: var(--text-muted);">Spend vs. Approved Conversions across 625 ads with OLS Regression</span>
+        </div>
+        <span class="status-badge" style="background: var(--bg-subtle); color: var(--text-secondary);">R² = 0.315 • p = 3.25e-53</span>
+      </div>
+
+      <div class="scatter-chart-wrap">
+        <canvas id="scatterChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Side Analysis Stack (Two balanced cards) -->
+    <div class="diminishing-stack">
+      
+      <!-- Card A: Marginal Economics -->
+      <div class="side-stat-box">
+        <div>
+          <div class="card-head" style="margin-bottom: 6px;">
+            <span style="font-size: 12.5px; font-weight: 600;">Marginal Acquisition Cost</span>
+            <span class="status-badge" style="background: var(--accent-coral-tint); color: var(--accent-coral);">1.30x of Avg CPA</span>
+          </div>
+          <div class="box-stat-coral">$82.89</div>
+          <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.4;">
+            Slope &beta;₁ = +0.01206. Incremental orders cost <strong>$82.89</strong> each vs. Campaign 1178's average CPA of <strong>$63.83</strong>.
+          </p>
+        </div>
+
+        <div class="guidance-banner">
+          <strong id="marginalRoasTitle">1.21x Marginal ROAS</strong>
+          <p>
+            Because marginal CPA ($82.89) is below assumed order value ($<span class="inlineOrderVal">100</span>), returns are <strong>diminishing but still profitable</strong>. Strategic rule: <em>Moderate growth, do not cut.</em>
+          </p>
+        </div>
+      </div>
+
+      <!-- Card B: Testing Sandboxes -->
+      <div class="side-stat-box">
+        <div class="card-head" style="margin-bottom: 6px;">
+          <span style="font-size: 12.5px; font-weight: 600;">Pilot Campaigns 916 &amp; 936 Note</span>
+          <span class="status-badge" style="background: var(--bg-subtle); color: var(--text-secondary);">Flat Slopes</span>
+        </div>
+        <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.45;">
+          Campaign 916 ($150 spend, p = 0.548) and Campaign 936 ($2.89k spend, p = 0.714) have statistically insignificant regression slopes. Ad spend was too low ($0-$20/ad) to support spend-scaling curves. Maintain as discovery sandboxes.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div>Marketing Campaign ROI Dashboard • Light Bento Grid Theme (QClay Reference)</div>
+    <div>Strictly Non-Synthetic Ad Tracking Dataset • Kaggle loveall/clicks-conversion-tracking</div>
+  </footer>
+
+  <!-- Script Logic -->
+  <script>
+    const DATA = {"portfolio": {"total_spend": 58705.23, "total_approved": 1079, "total_clicks": 38165, "total_impressions": 213434828, "portfolio_cpa": 54.41, "net_spend_change": -3769.29, "delta_approved": 24.1435}, "age_gender": [{"age": "30-34", "gender": "F", "spend": 7611.48, "approved": 195, "clicks": 5099, "impressions": 31571576, "segment": "30-34 F", "cpa": 39.03, "shift_pct": 15, "rationale": "Strong performer (CPA .03, 39% more efficient than avg). Solid volume and conversion justify scale-up."}, {"age": "30-34", "gender": "M", "spend": 7640.92, "approved": 299, "clicks": 4384, "impressions": 36421443, "segment": "30-34 M", "cpa": 25.55, "shift_pct": 25, "rationale": "Highest converting cohort (6.82% CVR) at lowest CPA (.55). Scaled up safely within marginal bounds."}, {"age": "35-39", "gender": "F", "spend": 6061.35, "approved": 95, "clicks": 4161, "impressions": 21439505, "segment": "35-39 F", "cpa": 63.8, "shift_pct": -10, "rationale": "Mildly lagging efficiency (CPA .80 is 17% worse than avg). Trim slightly to reallocate toward younger cohorts."}, {"age": "35-39", "gender": "M", "spend": 5051.08, "approved": 112, "clicks": 2933, "impressions": 20665139, "segment": "35-39 M", "cpa": 45.1, "shift_pct": 15, "rationale": "Solid performance (CPA .10, 21% more efficient than avg). Expand budget to capture incremental buyers."}, {"age": "40-44", "gender": "F", "spend": 7396.58, "approved": 93, "clicks": 5177, "impressions": 23396175, "segment": "40-44 F", "cpa": 79.53, "shift_pct": -20, "rationale": "Low conversion efficiency (1.80% CVR, .53 CPA). Shift spend toward responsive 30-34 groups."}, {"age": "40-44", "gender": "M", "spend": 4193.15, "approved": 77, "clicks": 2559, "impressions": 16208132, "segment": "40-44 M", "cpa": 54.46, "shift_pct": 0, "rationale": "Benchmark performer. CPA (.46) aligns with portfolio average. Maintain current spending level."}, {"age": "45-49", "gender": "F", "spend": 13433.21, "approved": 112, "clicks": 9441, "impressions": 38455591, "segment": "45-49 F", "cpa": 119.94, "shift_pct": -30, "rationale": "Unprofitable cohort (CPA .94, 1.19% CVR). Enforce maximum capped cut (-30%) to curb waste."}, {"age": "45-49", "gender": "M", "spend": 7317.46, "approved": 96, "clicks": 4411, "impressions": 25277267, "segment": "45-49 M", "cpa": 76.22, "shift_pct": -20, "rationale": "Low conversion rate (2.18%) and high CPA (.22). Reduce ad exposure while retaining brand presence."}], "interest": [{"interest_grouped": "16", "spend": 8084.91, "approved": 141, "clicks": 5144, "impressions": 31809524, "shift_pct": 0, "rationale": "Largest single interest pool; performance (.34 CPA) is near benchmark. Maintain spend.", "cpa": 57.34}, {"interest_grouped": "27", "spend": 5176.17, "approved": 54, "clicks": 3409, "impressions": 16352527, "shift_pct": -25, "rationale": "Near breakeven / low efficiency (.86 CPA). Aggressive trim.", "cpa": 95.85}, {"interest_grouped": "10", "spend": 5086.38, "approved": 91, "clicks": 3317, "impressions": 17989844, "shift_pct": 0, "rationale": "Near portfolio benchmark (.89 CPA). Maintain spend.", "cpa": 55.89}, {"interest_grouped": "29", "spend": 5045.19, "approved": 132, "clicks": 3315, "impressions": 18768653, "shift_pct": 20, "rationale": "Top tier interest (CPA .22, 42% above benchmark). Scale up.", "cpa": 38.22}, {"interest_grouped": "28", "spend": 3205.85, "approved": 42, "clicks": 2025, "impressions": 10959830, "shift_pct": -15, "rationale": "High CPA (.33, 40% worse than avg). Moderate trim.", "cpa": 76.33}, {"interest_grouped": "15", "spend": 2597.26, "approved": 63, "clicks": 1609, "impressions": 10745856, "shift_pct": 20, "rationale": "High conversion rate (3.92%) and low CPA (.23). Scale up.", "cpa": 41.23}, {"interest_grouped": "63", "spend": 2484.06, "approved": 34, "clicks": 1675, "impressions": 8365640, "shift_pct": -15, "rationale": "Low conversion rate (2.03%, .06 CPA). Moderate trim.", "cpa": 73.06}, {"interest_grouped": "18", "spend": 2425.07, "approved": 33, "clicks": 1524, "impressions": 8646488, "shift_pct": -15, "rationale": "Low conversion rate (2.17%, .49 CPA). Moderate trim.", "cpa": 73.49}, {"interest_grouped": "32", "spend": 1970.53, "approved": 35, "clicks": 1138, "impressions": 6455261, "shift_pct": 0, "rationale": "Near portfolio benchmark (.30 CPA). Maintain spend.", "cpa": 56.3}, {"interest_grouped": "20", "spend": 1960.77, "approved": 47, "clicks": 1234, "impressions": 6899907, "shift_pct": 20, "rationale": "Strong efficiency (CPA .72, 30% above avg). Scale up.", "cpa": 41.72}, {"interest_grouped": "19", "spend": 1940.36, "approved": 33, "clicks": 1188, "impressions": 6083217, "shift_pct": 0, "rationale": "Near portfolio benchmark (.80 CPA). Maintain spend.", "cpa": 58.8}, {"interest_grouped": "25", "spend": 1603.86, "approved": 19, "clicks": 1066, "impressions": 5251719, "shift_pct": -15, "rationale": "High CPA (.41). Moderate trim.", "cpa": 84.41}, {"interest_grouped": "26", "spend": 1591.77, "approved": 23, "clicks": 1113, "impressions": 4868639, "shift_pct": -15, "rationale": "Below average efficiency (.21 CPA). Moderate trim.", "cpa": 69.21}, {"interest_grouped": "64", "spend": 1486.13, "approved": 27, "clicks": 989, "impressions": 5085460, "shift_pct": 0, "rationale": "In line with portfolio benchmark (.04 CPA). Maintain spend.", "cpa": 55.04}, {"interest_grouped": "22", "spend": 1039.86, "approved": 12, "clicks": 717, "impressions": 3965401, "shift_pct": -15, "rationale": "High CPA (.66). Moderate trim.", "cpa": 86.65}, {"interest_grouped": "Other", "spend": 13007.06, "approved": 293, "clicks": 8702, "impressions": 51186862, "shift_pct": 10, "rationale": "Diversified pool of 25 niche interests with high aggregate efficiency (.39 CPA). Moderate scale.", "cpa": 44.39}], "regression_1178": {"intercept": 0.3208, "slope": 0.01206, "r2": 0.3153, "p_value": "3.25e-53", "avg_cpa": 63.83, "marginal_cpa": 82.89}, "regression_notes": {"camp_916": {"n": 54, "spend": 149.71, "slope": 0.0105, "p_value": 0.5481}, "camp_936": {"n": 464, "spend": 2893.37, "slope": -0.00057, "p_value": 0.7139}}, "view_through": {"zero_clicks_ads": 207, "zero_clicks_conversions": 204, "approved_conversions": 71, "total_impressions": 488881, "pct_of_all_ads": 18.1, "zero_click_inquiries": 212, "zero_click_inquiry_ads": 204, "zero_click_purchases": 76, "zero_click_purchase_ads": 71}};
+    const SCATTER_POINTS = [{"x": 254.05, "y": 14}, {"x": 122.4, "y": 5}, {"x": 0.0, "y": 1}, {"x": 86.33, "y": 2}, {"x": 161.91, "y": 2}, {"x": 1.82, "y": 0}, {"x": 236.77, "y": 10}, {"x": 639.95, "y": 17}, {"x": 1.59, "y": 1}, {"x": 52.97, "y": 3}, {"x": 360.15, "y": 21}, {"x": 16.52, "y": 2}, {"x": 1.54, "y": 0}, {"x": 163.9, "y": 14}, {"x": 210.36, "y": 2}, {"x": 35.73, "y": 1}, {"x": 215.84, "y": 4}, {"x": 3.8, "y": 0}, {"x": 96.8, "y": 0}, {"x": 157.33, "y": 4}, {"x": 26.57, "y": 1}, {"x": 93.09, "y": 3}, {"x": 78.92, "y": 1}, {"x": 103.15, "y": 0}, {"x": 36.53, "y": 1}, {"x": 28.85, "y": 1}, {"x": 257.71, "y": 9}, {"x": 7.22, "y": 0}, {"x": 7.9, "y": 1}, {"x": 62.06, "y": 1}, {"x": 2.1, "y": 1}, {"x": 14.14, "y": 2}, {"x": 23.73, "y": 2}, {"x": 1.71, "y": 0}, {"x": 9.44, "y": 0}, {"x": 27.8, "y": 0}, {"x": 67.65, "y": 2}, {"x": 2.98, "y": 0}, {"x": 3.24, "y": 0}, {"x": 52.26, "y": 2}, {"x": 13.04, "y": 1}, {"x": 38.39, "y": 1}, {"x": 138.77, "y": 2}, {"x": 260.38, "y": 7}, {"x": 8.55, "y": 0}, {"x": 15.63, "y": 0}, {"x": 60.2, "y": 0}, {"x": 34.19, "y": 0}, {"x": 3.24, "y": 0}, {"x": 5.14, "y": 1}, {"x": 216.56, "y": 4}, {"x": 93.07, "y": 0}, {"x": 56.06, "y": 0}, {"x": 54.1, "y": 2}, {"x": 7.8, "y": 1}, {"x": 5.22, "y": 0}, {"x": 358.55, "y": 7}, {"x": 280.99, "y": 2}, {"x": 115.12, "y": 5}, {"x": 219.77, "y": 8}, {"x": 52.02, "y": 1}, {"x": 35.31, "y": 12}, {"x": 63.32, "y": 3}, {"x": 54.24, "y": 0}, {"x": 65.23, "y": 1}, {"x": 4.21, "y": 0}, {"x": 48.61, "y": 1}, {"x": 13.92, "y": 2}, {"x": 11.06, "y": 0}, {"x": 0.0, "y": 0}, {"x": 87.42, "y": 0}, {"x": 1.66, "y": 1}, {"x": 6.74, "y": 0}, {"x": 8.22, "y": 2}, {"x": 5.58, "y": 0}, {"x": 9.23, "y": 1}, {"x": 34.23, "y": 1}, {"x": 3.15, "y": 0}, {"x": 20.21, "y": 1}, {"x": 59.44, "y": 2}, {"x": 38.59, "y": 1}, {"x": 0.0, "y": 1}, {"x": 21.85, "y": 1}, {"x": 1.96, "y": 0}, {"x": 22.32, "y": 0}, {"x": 110.24, "y": 2}, {"x": 29.75, "y": 2}, {"x": 18.47, "y": 0}, {"x": 36.24, "y": 0}, {"x": 76.44, "y": 1}, {"x": 0.0, "y": 1}, {"x": 11.8, "y": 2}, {"x": 26.82, "y": 1}, {"x": 65.67, "y": 4}, {"x": 32.24, "y": 1}, {"x": 245.6, "y": 8}, {"x": 17.64, "y": 3}, {"x": 38.55, "y": 1}, {"x": 40.76, "y": 0}, {"x": 6.37, "y": 0}, {"x": 0.0, "y": 0}, {"x": 89.76, "y": 1}, {"x": 16.15, "y": 0}, {"x": 189.13, "y": 3}, {"x": 8.53, "y": 0}, {"x": 67.77, "y": 3}, {"x": 96.9, "y": 1}, {"x": 37.13, "y": 1}, {"x": 53.16, "y": 1}, {"x": 192.93, "y": 2}, {"x": 236.12, "y": 6}, {"x": 12.57, "y": 0}, {"x": 12.58, "y": 1}, {"x": 28.05, "y": 1}, {"x": 83.48, "y": 2}, {"x": 30.48, "y": 1}, {"x": 20.3, "y": 1}, {"x": 131.58, "y": 1}, {"x": 14.63, "y": 0}, {"x": 64.47, "y": 1}, {"x": 30.15, "y": 2}, {"x": 62.25, "y": 2}, {"x": 78.04, "y": 1}, {"x": 3.4, "y": 0}, {"x": 14.83, "y": 0}, {"x": 22.43, "y": 1}, {"x": 44.14, "y": 0}, {"x": 69.66, "y": 3}, {"x": 16.27, "y": 0}, {"x": 5.79, "y": 0}, {"x": 42.08, "y": 0}, {"x": 67.67, "y": 0}, {"x": 34.07, "y": 0}, {"x": 41.72, "y": 1}, {"x": 19.57, "y": 0}, {"x": 57.37, "y": 1}, {"x": 17.37, "y": 1}, {"x": 100.29, "y": 0}, {"x": 3.71, "y": 0}, {"x": 23.21, "y": 0}, {"x": 0.0, "y": 0}, {"x": 177.89, "y": 1}, {"x": 66.77, "y": 1}, {"x": 32.68, "y": 0}, {"x": 420.58, "y": 8}, {"x": 87.55, "y": 0}, {"x": 232.37, "y": 1}, {"x": 150.14, "y": 0}, {"x": 96.48, "y": 0}, {"x": 95.51, "y": 4}, {"x": 72.31, "y": 2}, {"x": 0.0, "y": 0}, {"x": 9.21, "y": 3}, {"x": 254.25, "y": 2}, {"x": 11.17, "y": 0}, {"x": 34.23, "y": 1}, {"x": 25.26, "y": 1}, {"x": 1.29, "y": 0}, {"x": 113.99, "y": 3}, {"x": 121.1, "y": 3}, {"x": 98.7, "y": 2}, {"x": 8.8, "y": 1}, {"x": 9.93, "y": 1}, {"x": 53.39, "y": 2}, {"x": 3.77, "y": 1}, {"x": 3.19, "y": 0}, {"x": 24.18, "y": 1}, {"x": 76.9, "y": 1}, {"x": 14.52, "y": 1}, {"x": 36.17, "y": 0}, {"x": 38.44, "y": 4}, {"x": 61.93, "y": 3}, {"x": 70.41, "y": 1}, {"x": 37.6, "y": 0}, {"x": 20.59, "y": 0}, {"x": 24.78, "y": 1}, {"x": 29.54, "y": 1}, {"x": 37.85, "y": 1}, {"x": 2.29, "y": 0}, {"x": 24.19, "y": 1}, {"x": 8.52, "y": 0}, {"x": 163.36, "y": 1}, {"x": 58.14, "y": 1}, {"x": 29.31, "y": 1}, {"x": 116.34, "y": 2}, {"x": 60.9, "y": 1}, {"x": 40.02, "y": 1}, {"x": 260.07, "y": 2}, {"x": 359.47, "y": 6}, {"x": 105.71, "y": 2}, {"x": 10.66, "y": 1}, {"x": 143.3, "y": 2}, {"x": 65.03, "y": 0}, {"x": 117.56, "y": 1}, {"x": 143.43, "y": 1}, {"x": 9.66, "y": 1}, {"x": 124.8, "y": 3}, {"x": 98.55, "y": 0}, {"x": 40.77, "y": 0}, {"x": 134.88, "y": 3}, {"x": 19.36, "y": 2}, {"x": 0.0, "y": 0}, {"x": 43.01, "y": 0}, {"x": 42.63, "y": 0}, {"x": 75.79, "y": 0}, {"x": 7.71, "y": 1}, {"x": 14.04, "y": 0}, {"x": 39.86, "y": 0}, {"x": 36.78, "y": 0}, {"x": 54.87, "y": 0}, {"x": 87.79, "y": 1}, {"x": 6.73, "y": 0}, {"x": 76.84, "y": 0}, {"x": 15.54, "y": 0}, {"x": 17.67, "y": 2}, {"x": 49.6, "y": 1}, {"x": 53.27, "y": 0}, {"x": 126.93, "y": 2}, {"x": 179.62, "y": 1}, {"x": 38.42, "y": 0}, {"x": 58.6, "y": 1}, {"x": 39.73, "y": 1}, {"x": 19.11, "y": 1}, {"x": 15.81, "y": 1}, {"x": 140.97, "y": 2}, {"x": 60.76, "y": 1}, {"x": 13.51, "y": 0}, {"x": 55.1, "y": 0}, {"x": 12.63, "y": 1}, {"x": 81.36, "y": 1}, {"x": 16.47, "y": 1}, {"x": 31.03, "y": 0}, {"x": 60.73, "y": 1}, {"x": 74.83, "y": 1}, {"x": 7.48, "y": 0}, {"x": 36.48, "y": 1}, {"x": 68.06, "y": 0}, {"x": 7.88, "y": 1}, {"x": 1.46, "y": 0}, {"x": 123.55, "y": 1}, {"x": 135.75, "y": 1}, {"x": 116.88, "y": 2}, {"x": 365.66, "y": 3}, {"x": 128.28, "y": 1}, {"x": 10.78, "y": 1}, {"x": 133.7, "y": 2}, {"x": 64.88, "y": 0}, {"x": 603.38, "y": 7}, {"x": 220.56, "y": 1}, {"x": 33.9, "y": 1}, {"x": 318.97, "y": 3}, {"x": 248.64, "y": 2}, {"x": 40.93, "y": 1}, {"x": 109.25, "y": 0}, {"x": 134.12, "y": 1}, {"x": 103.39, "y": 4}, {"x": 116.56, "y": 0}, {"x": 120.3, "y": 1}, {"x": 25.46, "y": 0}, {"x": 35.68, "y": 0}, {"x": 131.78, "y": 1}, {"x": 29.91, "y": 1}, {"x": 46.79, "y": 1}, {"x": 3.19, "y": 0}, {"x": 16.68, "y": 0}, {"x": 11.11, "y": 0}, {"x": 127.57, "y": 0}, {"x": 11.01, "y": 0}, {"x": 3.6, "y": 0}, {"x": 33.66, "y": 0}, {"x": 33.35, "y": 0}, {"x": 128.61, "y": 3}, {"x": 33.93, "y": 1}, {"x": 36.44, "y": 1}, {"x": 5.77, "y": 0}, {"x": 181.72, "y": 0}, {"x": 41.42, "y": 1}, {"x": 58.68, "y": 0}, {"x": 80.34, "y": 0}, {"x": 104.46, "y": 0}, {"x": 87.73, "y": 0}, {"x": 253.99, "y": 2}, {"x": 39.44, "y": 0}, {"x": 39.05, "y": 0}, {"x": 16.94, "y": 1}, {"x": 142.71, "y": 2}, {"x": 27.3, "y": 0}, {"x": 29.38, "y": 1}, {"x": 277.58, "y": 8}, {"x": 422.84, "y": 10}, {"x": 38.5, "y": 0}, {"x": 17.33, "y": 1}, {"x": 32.31, "y": 1}, {"x": 41.97, "y": 0}, {"x": 352.45, "y": 1}, {"x": 264.59, "y": 1}, {"x": 158.6, "y": 2}, {"x": 4.77, "y": 0}, {"x": 4.82, "y": 1}, {"x": 37.26, "y": 1}, {"x": 39.52, "y": 0}, {"x": 19.48, "y": 0}, {"x": 16.38, "y": 1}, {"x": 22.67, "y": 1}, {"x": 15.99, "y": 0}, {"x": 17.05, "y": 0}, {"x": 64.41, "y": 4}, {"x": 44.22, "y": 2}, {"x": 38.18, "y": 1}, {"x": 268.05, "y": 5}, {"x": 77.59, "y": 1}, {"x": 46.78, "y": 2}, {"x": 153.12, "y": 1}, {"x": 55.99, "y": 1}, {"x": 31.54, "y": 3}, {"x": 147.34, "y": 1}, {"x": 159.57, "y": 2}, {"x": 117.63, "y": 1}, {"x": 171.98, "y": 2}, {"x": 18.1, "y": 1}, {"x": 4.3, "y": 0}, {"x": 11.57, "y": 0}, {"x": 24.48, "y": 0}, {"x": 169.67, "y": 4}, {"x": 62.14, "y": 1}, {"x": 76.68, "y": 1}, {"x": 195.15, "y": 3}, {"x": 38.36, "y": 3}, {"x": 24.57, "y": 1}, {"x": 74.41, "y": 3}, {"x": 33.47, "y": 2}, {"x": 4.22, "y": 1}, {"x": 147.67, "y": 0}, {"x": 0.0, "y": 0}, {"x": 62.14, "y": 0}, {"x": 4.56, "y": 1}, {"x": 35.06, "y": 1}, {"x": 29.31, "y": 0}, {"x": 169.92, "y": 0}, {"x": 41.63, "y": 1}, {"x": 75.7, "y": 2}, {"x": 256.47, "y": 6}, {"x": 612.3, "y": 13}, {"x": 51.84, "y": 0}, {"x": 54.79, "y": 0}, {"x": 179.05, "y": 3}, {"x": 17.74, "y": 0}, {"x": 375.72, "y": 3}, {"x": 1.57, "y": 0}, {"x": 429.48, "y": 10}, {"x": 95.85, "y": 1}, {"x": 3.82, "y": 0}, {"x": 226.54, "y": 6}, {"x": 50.72, "y": 1}, {"x": 54.57, "y": 0}, {"x": 25.22, "y": 1}, {"x": 9.97, "y": 1}, {"x": 1.73, "y": 1}, {"x": 123.09, "y": 4}, {"x": 37.83, "y": 0}, {"x": 33.04, "y": 1}, {"x": 105.02, "y": 6}, {"x": 0.0, "y": 0}, {"x": 5.93, "y": 0}, {"x": 0.0, "y": 0}, {"x": 3.75, "y": 0}, {"x": 343.26, "y": 4}, {"x": 19.19, "y": 1}, {"x": 61.03, "y": 3}, {"x": 56.17, "y": 1}, {"x": 39.23, "y": 0}, {"x": 99.18, "y": 1}, {"x": 16.18, "y": 0}, {"x": 23.97, "y": 1}, {"x": 2.62, "y": 1}, {"x": 2.78, "y": 1}, {"x": 0.0, "y": 0}, {"x": 42.37, "y": 1}, {"x": 22.05, "y": 0}, {"x": 10.32, "y": 0}, {"x": 9.81, "y": 0}, {"x": 63.45, "y": 0}, {"x": 10.55, "y": 1}, {"x": 38.94, "y": 0}, {"x": 38.03, "y": 1}, {"x": 314.3, "y": 2}, {"x": 173.76, "y": 0}, {"x": 37.32, "y": 1}, {"x": 2.63, "y": 1}, {"x": 263.81, "y": 3}, {"x": 177.11, "y": 2}, {"x": 343.42, "y": 4}, {"x": 33.23, "y": 1}, {"x": 234.66, "y": 1}, {"x": 297.83, "y": 3}, {"x": 31.01, "y": 1}, {"x": 84.66, "y": 1}, {"x": 115.88, "y": 0}, {"x": 84.51, "y": 2}, {"x": 13.06, "y": 0}, {"x": 23.65, "y": 0}, {"x": 89.35, "y": 0}, {"x": 17.3, "y": 0}, {"x": 23.34, "y": 0}, {"x": 40.96, "y": 0}, {"x": 50.11, "y": 1}, {"x": 66.79, "y": 1}, {"x": 1.64, "y": 0}, {"x": 36.23, "y": 0}, {"x": 62.87, "y": 1}, {"x": 71.58, "y": 1}, {"x": 350.51, "y": 1}, {"x": 213.69, "y": 5}, {"x": 10.96, "y": 0}, {"x": 37.4, "y": 4}, {"x": 210.82, "y": 6}, {"x": 42.41, "y": 1}, {"x": 33.2, "y": 0}, {"x": 72.91, "y": 0}, {"x": 293.88, "y": 4}, {"x": 167.05, "y": 1}, {"x": 123.8, "y": 2}, {"x": 85.7, "y": 0}, {"x": 65.18, "y": 1}, {"x": 46.43, "y": 1}, {"x": 68.56, "y": 2}, {"x": 8.19, "y": 0}, {"x": 48.55, "y": 0}, {"x": 82.28, "y": 0}, {"x": 71.53, "y": 0}, {"x": 191.42, "y": 3}, {"x": 321.87, "y": 4}, {"x": 65.03, "y": 0}, {"x": 194.81, "y": 2}, {"x": 78.46, "y": 1}, {"x": 53.63, "y": 1}, {"x": 243.77, "y": 1}, {"x": 262.89, "y": 2}, {"x": 4.05, "y": 1}, {"x": 16.41, "y": 1}, {"x": 66.39, "y": 0}, {"x": 9.61, "y": 0}, {"x": 22.12, "y": 0}, {"x": 78.06, "y": 0}, {"x": 40.88, "y": 2}, {"x": 88.21, "y": 2}, {"x": 48.94, "y": 0}, {"x": 95.85, "y": 0}, {"x": 106.93, "y": 6}, {"x": 254.42, "y": 2}, {"x": 117.34, "y": 1}, {"x": 390.26, "y": 0}, {"x": 340.41, "y": 2}, {"x": 33.47, "y": 1}, {"x": 66.28, "y": 1}, {"x": 48.18, "y": 1}, {"x": 156.12, "y": 2}, {"x": 288.33, "y": 0}, {"x": 40.37, "y": 1}, {"x": 19.28, "y": 0}, {"x": 34.03, "y": 0}, {"x": 29.67, "y": 0}, {"x": 47.79, "y": 0}, {"x": 111.65, "y": 0}, {"x": 24.33, "y": 0}, {"x": 188.51, "y": 1}, {"x": 33.14, "y": 1}, {"x": 59.85, "y": 0}, {"x": 21.11, "y": 1}, {"x": 38.35, "y": 1}, {"x": 30.84, "y": 1}, {"x": 14.59, "y": 1}, {"x": 15.92, "y": 0}, {"x": 24.22, "y": 0}, {"x": 238.4, "y": 3}, {"x": 132.73, "y": 1}, {"x": 201.6, "y": 1}, {"x": 465.08, "y": 2}, {"x": 234.94, "y": 0}, {"x": 195.08, "y": 0}, {"x": 104.69, "y": 0}, {"x": 295.55, "y": 0}, {"x": 226.03, "y": 0}, {"x": 287.69, "y": 1}, {"x": 315.9, "y": 2}, {"x": 332.99, "y": 0}, {"x": 282.49, "y": 2}, {"x": 115.66, "y": 0}, {"x": 247.32, "y": 3}, {"x": 11.2, "y": 2}, {"x": 25.46, "y": 0}, {"x": 299.53, "y": 5}, {"x": 140.42, "y": 4}, {"x": 100.88, "y": 2}, {"x": 13.35, "y": 0}, {"x": 73.75, "y": 1}, {"x": 76.76, "y": 0}, {"x": 145.82, "y": 1}, {"x": 125.27, "y": 1}, {"x": 38.63, "y": 1}, {"x": 7.14, "y": 0}, {"x": 116.99, "y": 0}, {"x": 175.97, "y": 1}, {"x": 105.66, "y": 0}, {"x": 259.18, "y": 1}, {"x": 46.92, "y": 0}, {"x": 187.74, "y": 0}, {"x": 380.66, "y": 2}, {"x": 541.7, "y": 0}, {"x": 409.56, "y": 4}, {"x": 102.39, "y": 0}, {"x": 67.13, "y": 1}, {"x": 22.86, "y": 0}, {"x": 134.89, "y": 0}, {"x": 369.07, "y": 8}, {"x": 198.09, "y": 1}, {"x": 91.0, "y": 1}, {"x": 297.91, "y": 3}, {"x": 50.29, "y": 0}, {"x": 9.42, "y": 0}, {"x": 20.52, "y": 0}, {"x": 38.14, "y": 3}, {"x": 142.05, "y": 1}, {"x": 402.3, "y": 0}, {"x": 159.3, "y": 1}, {"x": 193.66, "y": 1}, {"x": 66.84, "y": 0}, {"x": 178.67, "y": 0}, {"x": 130.36, "y": 0}, {"x": 114.86, "y": 0}, {"x": 3.2, "y": 0}, {"x": 7.53, "y": 4}, {"x": 2.69, "y": 1}, {"x": 27.33, "y": 1}, {"x": 53.79, "y": 0}, {"x": 61.01, "y": 3}, {"x": 46.67, "y": 3}, {"x": 12.11, "y": 0}, {"x": 3.2, "y": 1}, {"x": 32.09, "y": 1}, {"x": 2.96, "y": 1}, {"x": 23.7, "y": 0}, {"x": 16.94, "y": 2}, {"x": 46.65, "y": 1}, {"x": 12.68, "y": 0}, {"x": 19.82, "y": 1}, {"x": 21.26, "y": 0}, {"x": 40.73, "y": 0}, {"x": 25.01, "y": 0}, {"x": 11.52, "y": 1}, {"x": 7.7, "y": 0}, {"x": 12.15, "y": 1}, {"x": 14.96, "y": 0}, {"x": 1.49, "y": 1}, {"x": 28.47, "y": 0}, {"x": 15.15, "y": 0}, {"x": 60.23, "y": 1}, {"x": 28.72, "y": 1}, {"x": 34.87, "y": 2}, {"x": 13.5, "y": 1}, {"x": 13.56, "y": 0}, {"x": 9.26, "y": 1}, {"x": 17.94, "y": 0}, {"x": 25.75, "y": 1}, {"x": 30.08, "y": 0}, {"x": 7.26, "y": 1}, {"x": 18.42, "y": 1}, {"x": 50.5, "y": 1}, {"x": 82.14, "y": 2}, {"x": 36.6, "y": 1}, {"x": 19.58, "y": 0}, {"x": 13.65, "y": 0}, {"x": 30.26, "y": 0}, {"x": 113.68, "y": 4}, {"x": 11.43, "y": 2}, {"x": 99.52, "y": 2}, {"x": 110.78, "y": 2}, {"x": 120.88, "y": 0}, {"x": 35.54, "y": 1}, {"x": 119.64, "y": 4}, {"x": 11.19, "y": 0}, {"x": 138.92, "y": 1}, {"x": 14.48, "y": 1}, {"x": 163.8, "y": 9}, {"x": 111.99, "y": 3}, {"x": 15.05, "y": 0}, {"x": 237.32, "y": 3}, {"x": 47.88, "y": 1}, {"x": 164.64, "y": 0}, {"x": 200.83, "y": 5}, {"x": 105.22, "y": 2}, {"x": 127.32, "y": 1}, {"x": 68.67, "y": 1}, {"x": 20.05, "y": 0}, {"x": 9.41, "y": 1}, {"x": 77.6, "y": 2}, {"x": 16.73, "y": 1}, {"x": 246.75, "y": 7}, {"x": 223.19, "y": 9}, {"x": 67.61, "y": 0}, {"x": 319.0, "y": 0}, {"x": 82.93, "y": 0}, {"x": 57.0, "y": 0}, {"x": 233.11, "y": 4}, {"x": 217.78, "y": 2}, {"x": 323.06, "y": 1}, {"x": 87.99, "y": 2}, {"x": 105.45, "y": 1}, {"x": 120.9, "y": 0}, {"x": 301.05, "y": 10}, {"x": 62.32, "y": 1}, {"x": 279.22, "y": 1}, {"x": 158.05, "y": 4}, {"x": 36.01, "y": 2}, {"x": 16.34, "y": 0}, {"x": 162.64, "y": 5}, {"x": 333.75, "y": 4}, {"x": 33.71, "y": 0}, {"x": 232.59, "y": 4}, {"x": 47.69, "y": 1}, {"x": 358.19, "y": 2}, {"x": 173.88, "y": 0}, {"x": 40.29, "y": 0}, {"x": 198.71, "y": 2}, {"x": 165.61, "y": 2}];
+
+    let currentOrderValue = 100.0;
+    let activeLens = 'age_gender';
+    let lensChartInstance = null;
+    let scatterChartInstance = null;
+
+    // Elements
+    const orderSlider = document.getElementById('orderValueSlider');
+    const orderDisplay = document.getElementById('orderValueDisplay');
+    const kpiGrossRevenue = document.getElementById('kpiGrossRevenue');
+    const kpiNetProfit = document.getElementById('kpiNetProfit');
+    const subOrderVal = document.getElementById('subOrderVal');
+    const kpiProfitLift = document.getElementById('kpiProfitLift');
+    const kpiProfitLiftSub = document.getElementById('kpiProfitLiftSub');
+    const kpiRoasGaugeVal = document.getElementById('kpiRoasGaugeVal');
+    const roasGaugeCircle = document.getElementById('roasGaugeCircle');
+    const kpiBreakevenNotice = document.getElementById('kpiBreakevenNotice');
+    const chartBenchmarkVal = document.getElementById('chartBenchmarkVal');
+    const marginalRoasTitle = document.getElementById('marginalRoasTitle');
+    const inlineOrderVals = document.querySelectorAll('.inlineOrderVal');
+
+    // Concentric elements
+    const concOuterRevenue = document.getElementById('concOuterRevenue');
+    const concOrderValDisplays = document.querySelectorAll('.concOrderValDisplay');
+    const concLegL1 = document.getElementById('concLegL1');
+    const concLegL2 = document.getElementById('concLegL2');
+    const concLegL3 = document.getElementById('concLegL3');
+    const ringProgressL2 = document.getElementById('ringProgressL2');
+    const ringProgressL3 = document.getElementById('ringProgressL3');
+
+    // Tab Switcher
+    function switchLensTab(lens) {
+      activeLens = lens;
+      const btns = document.querySelectorAll('.nav-pill-btn');
+      if (lens === 'age_gender') {
+        btns[0].classList.add('active');
+        btns[1].classList.remove('active');
+      } else {
+        btns[0].classList.remove('active');
+        btns[1].classList.add('active');
+      }
+      renderLensContent();
+    }
+
+    // Recalculate Dashboard on Slider Move
+    function updateDashboard() {
+      const V = currentOrderValue;
+      const portfolioCpa = DATA.portfolio.portfolio_cpa; // 54.41
+      const portfolioRoas = V / portfolioCpa;
+      const totalRev = DATA.portfolio.total_approved * V; // 1079 * V
+      const baselineProfit = totalRev - DATA.portfolio.total_spend;
+
+      // Net impact
+      const deltaApproved = DATA.portfolio.delta_approved; // 24.14
+      const spendSavings = Math.abs(DATA.portfolio.net_spend_change); // 3769.29
+      const profitLift = (deltaApproved * V) + spendSavings;
+      const profitLiftPct = (profitLift / baselineProfit * 100);
+
+      // Marginal ROAS
+      const marginalCpa = DATA.regression_1178.marginal_cpa; // 82.89
+      const marginalRoas = V / marginalCpa;
+
+      // Update Texts
+      orderDisplay.textContent = `$${V}`;
+      subOrderVal.textContent = `$${V}`;
+      inlineOrderVals.forEach(el => el.textContent = V);
+      concOrderValDisplays.forEach(el => el.textContent = V);
+
+      kpiGrossRevenue.textContent = `$${Math.round(totalRev).toLocaleString()}`;
+      kpiNetProfit.textContent = `$${Math.round(baselineProfit).toLocaleString()}`;
+      kpiProfitLift.textContent = `+$${Math.round(profitLift).toLocaleString()}`;
+      kpiProfitLiftSub.textContent = `+${profitLiftPct.toFixed(1)}% net profit increase`;
+
+      kpiRoasGaugeVal.textContent = `${portfolioRoas.toFixed(2)}x`;
+      chartBenchmarkVal.textContent = `${portfolioRoas.toFixed(2)}x`;
+      kpiBreakevenNotice.textContent = `Breakeven CPA: $${V.toFixed(2)}`;
+      marginalRoasTitle.textContent = `${marginalRoas.toFixed(2)}x Marginal ROAS`;
+
+      // Update Circular Progress Ring (Circumference = 2 * PI * 45 = 282.74)
+      const circumference = 282.74;
+      const fillPct = Math.min(Math.max(portfolioRoas / 3.0, 0.05), 1.0);
+      const dashOffset = circumference * (1 - fillPct);
+      roasGaugeCircle.style.strokeDashoffset = dashOffset;
+
+      // Update Concentric External Readout & Legend
+      concOuterRevenue.textContent = `$${Math.round(totalRev).toLocaleString()}`;
+      concLegL1.textContent = `$${Math.round(totalRev).toLocaleString()}`;
+      concLegL2.textContent = `$${Math.round(totalRev * 0.562).toLocaleString()}`;
+      concLegL3.textContent = `$${Math.round(299 * V).toLocaleString()}`;
+
+      // Render Active Tab Content
+      renderLensContent();
+    }
+
+    // Render Tab Content (Chart + Cards)
+    function renderLensContent() {
+      const V = currentOrderValue;
+      const portfolioRoas = V / DATA.portfolio.portfolio_cpa;
+      const isAgeGender = activeLens === 'age_gender';
+      const items = isAgeGender ? DATA.age_gender : DATA.interest;
+
+      // 1. Update Chart
+      const labels = items.map(d => isAgeGender ? d.segment : 'ID ' + d.interest_grouped);
+      const roasValues = items.map(d => V / d.cpa);
+      const bgColors = roasValues.map(r => r >= portfolioRoas ? '#FF6B4A' : '#D1CBC2');
+
+      if (!lensChartInstance) {
+        const ctx = document.getElementById('lensChart').getContext('2d');
+        lensChartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              data: roasValues,
+              backgroundColor: bgColors,
+              borderRadius: 6,
+              barThickness: 14
+            }]
+          },
+          options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: ctx => `ROAS: ${ctx.raw.toFixed(2)}x (CPA: $${items[ctx.dataIndex].cpa.toFixed(2)})`
+                }
+              }
+            },
+            scales: {
+              x: {
+                grid: { color: '#EFECE6' },
+                ticks: { color: '#8E95A5', callback: v => v + 'x' }
+              },
+              y: {
+                grid: { display: false },
+                ticks: { color: '#181A1F', font: { weight: 600, size: 10.5 } }
+              }
+            }
+          }
+        });
+      } else {
+        lensChartInstance.data.labels = labels;
+        lensChartInstance.data.datasets[0].data = roasValues;
+        lensChartInstance.data.datasets[0].backgroundColor = bgColors;
+        lensChartInstance.update();
+      }
+
+      // 2. Render Card-Based Rows
+      const container = document.getElementById('tableCardsContainer');
+      let html = '';
+
+      items.forEach(d => {
+        const roas = V / d.cpa;
+        const newSpend = d.spend * (1 + d.shift_pct / 100);
+        const shiftClass = d.shift_pct > 0 ? 'shift-pos' : (d.shift_pct < 0 ? 'shift-neg' : 'shift-zero');
+        const shiftLabel = d.shift_pct > 0 ? `+${d.shift_pct}%` : (d.shift_pct < 0 ? `${d.shift_pct}%` : '0%');
+        const title = isAgeGender ? d.segment : `Interest ${d.interest_grouped}`;
+
+        html += `
+          <div class="cohort-card-row">
+            <div class="col-cohort">
+              <strong>${title}</strong>
+              <span>$${Math.round(d.spend).toLocaleString()}</span>
+            </div>
+            
+            <div class="col-metrics">
+              <div>CPA: <strong>$${d.cpa.toFixed(2)}</strong></div>
+              <div style="font-size: 10.5px; color: var(--text-muted);">${d.rationale}</div>
+            </div>
+
+            <div class="col-roas">
+              ${roas.toFixed(2)}x
+              <small>${roas >= 1.0 ? 'Profitable' : 'Loss'}</small>
+            </div>
+
+            <div style="text-align: center;">
+              <span class="shift-tag ${shiftClass}">${shiftLabel}</span>
+            </div>
+
+            <div class="col-new-spend">
+              $${Math.round(newSpend).toLocaleString()}
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    // Scatter Plot Init
+    function initScatterPlot() {
+      const ctx = document.getElementById('scatterChart').getContext('2d');
+      const maxSpend = Math.max(...SCATTER_POINTS.map(p => p.x));
+      const b0 = DATA.regression_1178.intercept;
+      const b1 = DATA.regression_1178.slope;
+      
+      const regressionLine = [
+        { x: 0, y: b0 },
+        { x: maxSpend, y: b0 + b1 * maxSpend }
+      ];
+
+      scatterChartInstance = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+          datasets: [
+            {
+              label: 'Ads (n = 625)',
+              data: SCATTER_POINTS,
+              backgroundColor: 'rgba(21, 24, 30, 0.25)',
+              borderColor: 'transparent',
+              pointRadius: 3.5,
+              pointHoverRadius: 6
+            },
+            {
+              label: 'OLS Regression Line',
+              data: regressionLine,
+              type: 'line',
+              borderColor: '#FF6B4A',
+              borderWidth: 2.5,
+              pointRadius: 0,
+              fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: { color: '#5F6675', font: { size: 11.5 } }
+            },
+            tooltip: {
+              callbacks: {
+                label: ctx => `Spend: $${ctx.parsed.x.toFixed(2)} | Approved: ${ctx.parsed.y} orders`
+              }
+            }
+          },
+          scales: {
+            x: {
+              title: { display: true, text: 'Ad Spend ($USD)', color: '#8D94A3', font: { size: 11 } },
+              grid: { color: '#EDE9E3' },
+              ticks: { color: '#8D94A3' }
+            },
+            y: {
+              title: { display: true, text: 'Approved Conversions (Orders)', color: '#8D94A3', font: { size: 11 } },
+              grid: { color: '#EDE9E3' },
+              ticks: { color: '#8D94A3' }
+            }
+          }
+        }
+      });
+    }
+
+    // Listener
+    orderSlider.addEventListener('input', e => {
+      currentOrderValue = parseFloat(e.target.value);
+      updateDashboard();
+    });
+
+    // Boot
+    window.addEventListener('DOMContentLoaded', () => {
+      updateDashboard();
+      initScatterPlot();
+    });
+  </script>
+</body>
+</html>
