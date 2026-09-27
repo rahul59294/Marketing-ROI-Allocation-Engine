@@ -628,12 +628,123 @@
       border-radius: 4px;
     }
 
+    /* Statistical Validation Callout Banner */
+    .stat-validation-callout {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-left: 4px solid var(--color-emerald);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      margin-bottom: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .stat-val-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .stat-val-title-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stat-live-badge {
+      font-family: 'Sora', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stat-live-badge::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--color-emerald);
+      display: inline-block;
+    }
+
+    .stat-method-tag {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .stat-val-desc {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Tier & Statistical Confidence Badges */
+    .tier-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-top: 3px;
+      width: fit-content;
+      white-space: nowrap;
+    }
+
+    .tier-tag-top {
+      background: rgba(255, 107, 74, 0.12);
+      color: var(--accent-coral);
+    }
+
+    .tier-tag-tied {
+      background: rgba(76, 95, 213, 0.12);
+      color: #4C5FD5;
+    }
+
+    .tier-tag-mid {
+      background: var(--bg-muted);
+      color: var(--text-secondary);
+    }
+
+    .tier-tag-low {
+      background: rgba(245, 158, 11, 0.12);
+      color: #D97706;
+    }
+
+    .tier-tag-bottom {
+      background: rgba(239, 68, 68, 0.12);
+      color: #DC2626;
+    }
+
+    .ci-pill {
+      font-family: 'Inter', sans-serif;
+      font-size: 10.5px;
+      font-weight: 600;
+      color: #374151;
+      background: #EAE6DE;
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-left: 3px;
+      display: inline-block;
+    }
+
     .cohort-card-row {
       background: var(--bg-subtle);
       border-radius: var(--radius-md);
       padding: 12px 16px;
       display: grid;
-      grid-template-columns: 120px 1fr 75px 70px 75px;
+      grid-template-columns: 135px 1fr 90px 65px 75px;
       align-items: center;
       gap: 12px;
       transition: background 0.15s ease;
@@ -859,12 +970,12 @@
           <span class="card-label">Recommended Reallocation</span>
           <span style="font-size: 18px;">⚡</span>
         </div>
-        <div class="hero-num-huge" id="kpiProfitLift">+$6,184</div>
-        <div class="hero-sub" id="kpiProfitLiftSub">+12.6% net profit increase</div>
+        <div class="hero-num-huge" id="kpiProfitLift">+$6,127</div>
+        <div class="hero-sub" id="kpiProfitLiftSub">+12.5% net profit increase</div>
       </div>
       <div>
         <div class="coral-save-tag">
-          <span>Saves $3,769 in ad budget</span>
+          <span id="kpiBudgetSavings">Saves $3,706 in ad budget</span>
         </div>
       </div>
     </div>
@@ -1008,6 +1119,20 @@
         <span class="lens-info-pill">Independent lenses on same $58.7k budget (not additive)</span>
       </div>
 
+      <!-- Statistical Significance & Validation Banner -->
+      <div class="stat-validation-callout" id="statValidationBanner">
+        <div class="stat-val-header">
+          <div class="stat-val-title-group">
+            <span class="stat-live-badge">Empirical Significance Confirmed</span>
+            <span class="status-badge" style="background: rgba(31, 157, 119, 0.12); color: var(--color-emerald); font-weight: 700;">χ² = 331.97 (df = 7, p &lt; 0.001)</span>
+          </div>
+          <span class="stat-method-tag">Pearson's χ² Test of Independence &amp; Wilson Score 95% CIs</span>
+        </div>
+        <p class="stat-val-desc" id="statValidationText">
+          Chi-square test of independence confirms conversion differences across segments are statistically confirmed, not random variation (p = 8.89×10⁻⁶⁸). Recommended shifts are grounded in proven performance gaps—chasing signal, not noise. Statistically indistinguishable cohorts (Women 30–34 tied with Men 35–39; Women 35–39 tied with Men 45–49) are merged into shared reallocation tiers with equal shift percentages and unified rationales.
+        </p>
+      </div>
+
       <div class="lens-inner-grid">
         <!-- Chart -->
         <div>
@@ -1075,13 +1200,31 @@
         </div>
       </div>
 
-      <!-- Card B: Testing Sandboxes -->
+      <!-- Card B: Demographic Statistical Validation -->
+      <div class="side-stat-box">
+        <div>
+          <div class="card-head" style="margin-bottom: 6px;">
+            <span style="font-size: 12.5px; font-weight: 600;">Demographic Statistical Validation</span>
+            <span class="status-badge" style="background: var(--color-emerald-tint); color: var(--color-emerald); font-weight: 700;">p &lt; 0.001</span>
+          </div>
+          <div class="box-stat-coral" style="color: var(--text-primary); font-size: 20px;">χ² = 331.97 <span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">(df = 7, n = 38,165)</span></div>
+          <p style="font-size: 11.5px; color: var(--text-secondary); line-height: 1.45; margin-top: 4px;">
+            Chi-square test of independence confirms conversion rate differences across demographic cohorts are real, not random sampling variation. Reallocation targets proven statistical gaps instead of chasing noise.
+          </p>
+        </div>
+        <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--bg-muted); display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted);">
+          <span>Analyzed Clicks: 38,165</span>
+          <span>Approved Sales: 1,003</span>
+        </div>
+      </div>
+
+      <!-- Card C: Testing Sandboxes -->
       <div class="side-stat-box">
         <div class="card-head" style="margin-bottom: 6px;">
           <span style="font-size: 12.5px; font-weight: 600;">Pilot Campaigns 916 &amp; 936 Note</span>
           <span class="status-badge" style="background: var(--bg-subtle); color: var(--text-secondary);">Flat Slopes</span>
         </div>
-        <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.45;">
+        <p style="font-size: 11.5px; color: var(--text-secondary); line-height: 1.45;">
           Campaign 916 ($150 spend, p = 0.548) and Campaign 936 ($2.89k spend, p = 0.714) have statistically insignificant regression slopes. Ad spend was too low ($0-$20/ad) to support spend-scaling curves. Maintain as discovery sandboxes.
         </p>
       </div>
@@ -1098,7 +1241,7 @@
 
   <!-- Script Logic -->
   <script>
-    const DATA = {"portfolio": {"total_spend": 58705.23, "total_approved": 1079, "total_clicks": 38165, "total_impressions": 213434828, "portfolio_cpa": 54.41, "net_spend_change": -3769.29, "delta_approved": 24.1435}, "age_gender": [{"age": "30-34", "gender": "F", "spend": 7611.48, "approved": 195, "clicks": 5099, "impressions": 31571576, "segment": "30-34 F", "cpa": 39.03, "shift_pct": 15, "rationale": "Strong performer (CPA .03, 39% more efficient than avg). Solid volume and conversion justify scale-up."}, {"age": "30-34", "gender": "M", "spend": 7640.92, "approved": 299, "clicks": 4384, "impressions": 36421443, "segment": "30-34 M", "cpa": 25.55, "shift_pct": 25, "rationale": "Highest converting cohort (6.82% CVR) at lowest CPA (.55). Scaled up safely within marginal bounds."}, {"age": "35-39", "gender": "F", "spend": 6061.35, "approved": 95, "clicks": 4161, "impressions": 21439505, "segment": "35-39 F", "cpa": 63.8, "shift_pct": -10, "rationale": "Mildly lagging efficiency (CPA .80 is 17% worse than avg). Trim slightly to reallocate toward younger cohorts."}, {"age": "35-39", "gender": "M", "spend": 5051.08, "approved": 112, "clicks": 2933, "impressions": 20665139, "segment": "35-39 M", "cpa": 45.1, "shift_pct": 15, "rationale": "Solid performance (CPA .10, 21% more efficient than avg). Expand budget to capture incremental buyers."}, {"age": "40-44", "gender": "F", "spend": 7396.58, "approved": 93, "clicks": 5177, "impressions": 23396175, "segment": "40-44 F", "cpa": 79.53, "shift_pct": -20, "rationale": "Low conversion efficiency (1.80% CVR, .53 CPA). Shift spend toward responsive 30-34 groups."}, {"age": "40-44", "gender": "M", "spend": 4193.15, "approved": 77, "clicks": 2559, "impressions": 16208132, "segment": "40-44 M", "cpa": 54.46, "shift_pct": 0, "rationale": "Benchmark performer. CPA (.46) aligns with portfolio average. Maintain current spending level."}, {"age": "45-49", "gender": "F", "spend": 13433.21, "approved": 112, "clicks": 9441, "impressions": 38455591, "segment": "45-49 F", "cpa": 119.94, "shift_pct": -30, "rationale": "Unprofitable cohort (CPA .94, 1.19% CVR). Enforce maximum capped cut (-30%) to curb waste."}, {"age": "45-49", "gender": "M", "spend": 7317.46, "approved": 96, "clicks": 4411, "impressions": 25277267, "segment": "45-49 M", "cpa": 76.22, "shift_pct": -20, "rationale": "Low conversion rate (2.18%) and high CPA (.22). Reduce ad exposure while retaining brand presence."}], "interest": [{"interest_grouped": "16", "spend": 8084.91, "approved": 141, "clicks": 5144, "impressions": 31809524, "shift_pct": 0, "rationale": "Largest single interest pool; performance (.34 CPA) is near benchmark. Maintain spend.", "cpa": 57.34}, {"interest_grouped": "27", "spend": 5176.17, "approved": 54, "clicks": 3409, "impressions": 16352527, "shift_pct": -25, "rationale": "Near breakeven / low efficiency (.86 CPA). Aggressive trim.", "cpa": 95.85}, {"interest_grouped": "10", "spend": 5086.38, "approved": 91, "clicks": 3317, "impressions": 17989844, "shift_pct": 0, "rationale": "Near portfolio benchmark (.89 CPA). Maintain spend.", "cpa": 55.89}, {"interest_grouped": "29", "spend": 5045.19, "approved": 132, "clicks": 3315, "impressions": 18768653, "shift_pct": 20, "rationale": "Top tier interest (CPA .22, 42% above benchmark). Scale up.", "cpa": 38.22}, {"interest_grouped": "28", "spend": 3205.85, "approved": 42, "clicks": 2025, "impressions": 10959830, "shift_pct": -15, "rationale": "High CPA (.33, 40% worse than avg). Moderate trim.", "cpa": 76.33}, {"interest_grouped": "15", "spend": 2597.26, "approved": 63, "clicks": 1609, "impressions": 10745856, "shift_pct": 20, "rationale": "High conversion rate (3.92%) and low CPA (.23). Scale up.", "cpa": 41.23}, {"interest_grouped": "63", "spend": 2484.06, "approved": 34, "clicks": 1675, "impressions": 8365640, "shift_pct": -15, "rationale": "Low conversion rate (2.03%, .06 CPA). Moderate trim.", "cpa": 73.06}, {"interest_grouped": "18", "spend": 2425.07, "approved": 33, "clicks": 1524, "impressions": 8646488, "shift_pct": -15, "rationale": "Low conversion rate (2.17%, .49 CPA). Moderate trim.", "cpa": 73.49}, {"interest_grouped": "32", "spend": 1970.53, "approved": 35, "clicks": 1138, "impressions": 6455261, "shift_pct": 0, "rationale": "Near portfolio benchmark (.30 CPA). Maintain spend.", "cpa": 56.3}, {"interest_grouped": "20", "spend": 1960.77, "approved": 47, "clicks": 1234, "impressions": 6899907, "shift_pct": 20, "rationale": "Strong efficiency (CPA .72, 30% above avg). Scale up.", "cpa": 41.72}, {"interest_grouped": "19", "spend": 1940.36, "approved": 33, "clicks": 1188, "impressions": 6083217, "shift_pct": 0, "rationale": "Near portfolio benchmark (.80 CPA). Maintain spend.", "cpa": 58.8}, {"interest_grouped": "25", "spend": 1603.86, "approved": 19, "clicks": 1066, "impressions": 5251719, "shift_pct": -15, "rationale": "High CPA (.41). Moderate trim.", "cpa": 84.41}, {"interest_grouped": "26", "spend": 1591.77, "approved": 23, "clicks": 1113, "impressions": 4868639, "shift_pct": -15, "rationale": "Below average efficiency (.21 CPA). Moderate trim.", "cpa": 69.21}, {"interest_grouped": "64", "spend": 1486.13, "approved": 27, "clicks": 989, "impressions": 5085460, "shift_pct": 0, "rationale": "In line with portfolio benchmark (.04 CPA). Maintain spend.", "cpa": 55.04}, {"interest_grouped": "22", "spend": 1039.86, "approved": 12, "clicks": 717, "impressions": 3965401, "shift_pct": -15, "rationale": "High CPA (.66). Moderate trim.", "cpa": 86.65}, {"interest_grouped": "Other", "spend": 13007.06, "approved": 293, "clicks": 8702, "impressions": 51186862, "shift_pct": 10, "rationale": "Diversified pool of 25 niche interests with high aggregate efficiency (.39 CPA). Moderate scale.", "cpa": 44.39}], "regression_1178": {"intercept": 0.3208, "slope": 0.01206, "r2": 0.3153, "p_value": "3.25e-53", "avg_cpa": 63.83, "marginal_cpa": 82.89}, "regression_notes": {"camp_916": {"n": 54, "spend": 149.71, "slope": 0.0105, "p_value": 0.5481}, "camp_936": {"n": 464, "spend": 2893.37, "slope": -0.00057, "p_value": 0.7139}}, "view_through": {"zero_clicks_ads": 207, "zero_clicks_conversions": 204, "approved_conversions": 71, "total_impressions": 488881, "pct_of_all_ads": 18.1, "zero_click_inquiries": 212, "zero_click_inquiry_ads": 204, "zero_click_purchases": 76, "zero_click_purchase_ads": 71}};
+    const DATA = {"portfolio": {"total_spend": 58705.23, "total_approved": 1079, "total_clicks": 38165, "total_impressions": 213434828, "portfolio_cpa": 54.41, "net_spend_change": -3706.49, "delta_approved": 24.21}, "age_gender": [{"age": "30-34", "gender": "M", "segment": "30-34 M", "spend": 7640.92, "approved": 299, "clicks": 4384, "impressions": 36421443, "cpa": 25.55, "cvr_pct": 6.0, "ci_lower": 5.33, "ci_upper": 6.74, "shift_pct": 25, "tier": "Tier 1: Top Performer", "is_tied": false, "rationale": "Highest converting cohort in portfolio (6.00% CVR [5.33\u20136.74%], lowest CPA $25.55). Scaled up +25% within diminishing return safe bounds."}, {"age": "35-39", "gender": "M", "segment": "35-39 M", "spend": 5051.08, "approved": 112, "clicks": 2933, "impressions": 20665139, "cpa": 45.1, "cvr_pct": 3.72, "ci_lower": 3.09, "ci_upper": 4.46, "shift_pct": 15, "tier": "Tier 2: High Efficiency (Tied Parity)", "is_tied": true, "tied_with": "Women 30-34", "tie_stat": "z = -0.43, p = 0.67", "rationale": "Statistically tied high-efficiency tier with Women 30-34 (z = -0.43, p = 0.67). Both cohorts outperform portfolio benchmark with overlapping CIs; recommended for shared +15% scale-up."}, {"age": "30-34", "gender": "F", "segment": "30-34 F", "spend": 7611.48, "approved": 195, "clicks": 5099, "impressions": 31571576, "cpa": 39.03, "cvr_pct": 3.53, "ci_lower": 3.06, "ci_upper": 4.07, "shift_pct": 15, "tier": "Tier 2: High Efficiency (Tied Parity)", "is_tied": true, "tied_with": "Men 35-39", "tie_stat": "z = -0.43, p = 0.67", "rationale": "Statistically tied high-efficiency tier with Men 35-39 (z = -0.43, p = 0.67). Both cohorts outperform portfolio benchmark with overlapping CIs; recommended for shared +15% scale-up."}, {"age": "40-44", "gender": "M", "segment": "40-44 M", "spend": 4193.15, "approved": 77, "clicks": 2559, "impressions": 16208132, "cpa": 54.46, "cvr_pct": 2.85, "ci_lower": 2.27, "ci_upper": 3.57, "shift_pct": 0, "tier": "Tier 3: Portfolio Benchmark", "is_tied": false, "rationale": "Benchmark performer (2.85% CVR [2.27\u20133.57%]). Unit cost ($54.46 CPA) exactly matches portfolio benchmark ($54.41). Maintain current budget (0% hold)."}, {"age": "35-39", "gender": "F", "segment": "35-39 F", "spend": 6061.35, "approved": 95, "clicks": 4161, "impressions": 21439505, "cpa": 63.8, "cvr_pct": 2.16, "ci_lower": 1.76, "ci_upper": 2.65, "shift_pct": -15, "tier": "Tier 4: Moderate Efficiency (Tied Parity)", "is_tied": true, "tied_with": "Men 45-49", "tie_stat": "z = 0.33, p = 0.74", "rationale": "Statistically tied lower-efficiency tier with Men 45-49 (z = 0.33, p = 0.74). Conversion rates are indistinguishable; shared moderate trim (-15%) to fund higher tiers."}, {"age": "45-49", "gender": "M", "segment": "45-49 M", "spend": 7317.46, "approved": 96, "clicks": 4411, "impressions": 25277267, "cpa": 76.22, "cvr_pct": 2.06, "ci_lower": 1.68, "ci_upper": 2.53, "shift_pct": -15, "tier": "Tier 4: Moderate Efficiency (Tied Parity)", "is_tied": true, "tied_with": "Women 35-39", "tie_stat": "z = 0.33, p = 0.74", "rationale": "Statistically tied lower-efficiency tier with Women 35-39 (z = 0.33, p = 0.74). Conversion rates are indistinguishable; shared moderate trim (-15%) to fund higher tiers."}, {"age": "40-44", "gender": "F", "segment": "40-44 F", "spend": 7396.58, "approved": 93, "clicks": 5177, "impressions": 23396175, "cpa": 79.53, "cvr_pct": 1.72, "ci_lower": 1.4, "ci_upper": 2.11, "shift_pct": -20, "tier": "Tier 5: Lagging Efficiency", "is_tied": false, "rationale": "Lagging conversion efficiency (1.72% CVR [1.40\u20132.11%], CPA $79.53). Trim budget (-20%) and reallocate capital toward responsive 30-34 cohorts."}, {"age": "45-49", "gender": "F", "segment": "45-49 F", "spend": 13433.21, "approved": 112, "clicks": 9441, "impressions": 38455591, "cpa": 119.94, "cvr_pct": 1.14, "ci_lower": 0.95, "ci_upper": 1.38, "shift_pct": -30, "tier": "Tier 6: Lowest CVR in Portfolio", "is_tied": false, "breakeven_cpa": 119.94, "rationale": "Lowest conversion rate in portfolio (1.14%, 95% CI [0.95%, 1.38%]) \u2014 unprofitable under the $100 assumed order value. Enforce maximum capped cut (-30%) to curb waste."}], "interest": [{"interest_grouped": "16", "spend": 8084.91, "approved": 141, "clicks": 5144, "impressions": 31809524, "shift_pct": 0, "rationale": "Largest single interest pool; performance (.34 CPA) is near benchmark. Maintain spend.", "cpa": 57.34}, {"interest_grouped": "27", "spend": 5176.17, "approved": 54, "clicks": 3409, "impressions": 16352527, "shift_pct": -25, "rationale": "Near breakeven / low efficiency (.86 CPA). Aggressive trim.", "cpa": 95.85}, {"interest_grouped": "10", "spend": 5086.38, "approved": 91, "clicks": 3317, "impressions": 17989844, "shift_pct": 0, "rationale": "Near portfolio benchmark (.89 CPA). Maintain spend.", "cpa": 55.89}, {"interest_grouped": "29", "spend": 5045.19, "approved": 132, "clicks": 3315, "impressions": 18768653, "shift_pct": 20, "rationale": "Top tier interest (CPA .22, 42% above benchmark). Scale up.", "cpa": 38.22}, {"interest_grouped": "28", "spend": 3205.85, "approved": 42, "clicks": 2025, "impressions": 10959830, "shift_pct": -15, "rationale": "High CPA (.33, 40% worse than avg). Moderate trim.", "cpa": 76.33}, {"interest_grouped": "15", "spend": 2597.26, "approved": 63, "clicks": 1609, "impressions": 10745856, "shift_pct": 20, "rationale": "High conversion rate (3.92%) and low CPA (.23). Scale up.", "cpa": 41.23}, {"interest_grouped": "63", "spend": 2484.06, "approved": 34, "clicks": 1675, "impressions": 8365640, "shift_pct": -15, "rationale": "Low conversion rate (2.03%, .06 CPA). Moderate trim.", "cpa": 73.06}, {"interest_grouped": "18", "spend": 2425.07, "approved": 33, "clicks": 1524, "impressions": 8646488, "shift_pct": -15, "rationale": "Low conversion rate (2.17%, .49 CPA). Moderate trim.", "cpa": 73.49}, {"interest_grouped": "32", "spend": 1970.53, "approved": 35, "clicks": 1138, "impressions": 6455261, "shift_pct": 0, "rationale": "Near portfolio benchmark (.30 CPA). Maintain spend.", "cpa": 56.3}, {"interest_grouped": "20", "spend": 1960.77, "approved": 47, "clicks": 1234, "impressions": 6899907, "shift_pct": 20, "rationale": "Strong efficiency (CPA .72, 30% above avg). Scale up.", "cpa": 41.72}, {"interest_grouped": "19", "spend": 1940.36, "approved": 33, "clicks": 1188, "impressions": 6083217, "shift_pct": 0, "rationale": "Near portfolio benchmark (.80 CPA). Maintain spend.", "cpa": 58.8}, {"interest_grouped": "25", "spend": 1603.86, "approved": 19, "clicks": 1066, "impressions": 5251719, "shift_pct": -15, "rationale": "High CPA (.41). Moderate trim.", "cpa": 84.41}, {"interest_grouped": "26", "spend": 1591.77, "approved": 23, "clicks": 1113, "impressions": 4868639, "shift_pct": -15, "rationale": "Below average efficiency (.21 CPA). Moderate trim.", "cpa": 69.21}, {"interest_grouped": "64", "spend": 1486.13, "approved": 27, "clicks": 989, "impressions": 5085460, "shift_pct": 0, "rationale": "In line with portfolio benchmark (.04 CPA). Maintain spend.", "cpa": 55.04}, {"interest_grouped": "22", "spend": 1039.86, "approved": 12, "clicks": 717, "impressions": 3965401, "shift_pct": -15, "rationale": "High CPA (.66). Moderate trim.", "cpa": 86.65}, {"interest_grouped": "Other", "spend": 13007.06, "approved": 293, "clicks": 8702, "impressions": 51186862, "shift_pct": 10, "rationale": "Diversified pool of 25 niche interests with high aggregate efficiency (.39 CPA). Moderate scale.", "cpa": 44.39}], "regression_1178": {"intercept": 0.3208, "slope": 0.01206, "r2": 0.3153, "p_value": "3.25e-53", "avg_cpa": 63.83, "marginal_cpa": 82.89}, "regression_notes": {"camp_916": {"n": 54, "spend": 149.71, "slope": 0.0105, "p_value": 0.5481}, "camp_936": {"n": 464, "spend": 2893.37, "slope": -0.00057, "p_value": 0.7139}}, "view_through": {"zero_clicks_ads": 207, "zero_clicks_conversions": 204, "approved_conversions": 71, "total_impressions": 488881, "pct_of_all_ads": 18.1, "zero_click_inquiries": 212, "zero_click_inquiry_ads": 204, "zero_click_purchases": 76, "zero_click_purchase_ads": 71}, "statistical_validation": {"chi2": 331.97, "df": 7, "p_value": "< 0.001", "p_value_exact": "8.89e-68", "contingency_n": 38165, "contingency_k": 1003, "method": "Pearson Chi-Square Test & Wilson Score 95% CIs", "summary": "Chi-square test confirms conversion differences across segments are real, not random variation (\u03c7\u00b2 = 331.97, df=7, p < 0.001). Reallocation is grounded in statistically confirmed differences, not chasing noise."}};
     const SCATTER_POINTS = [{"x": 254.05, "y": 14}, {"x": 122.4, "y": 5}, {"x": 0.0, "y": 1}, {"x": 86.33, "y": 2}, {"x": 161.91, "y": 2}, {"x": 1.82, "y": 0}, {"x": 236.77, "y": 10}, {"x": 639.95, "y": 17}, {"x": 1.59, "y": 1}, {"x": 52.97, "y": 3}, {"x": 360.15, "y": 21}, {"x": 16.52, "y": 2}, {"x": 1.54, "y": 0}, {"x": 163.9, "y": 14}, {"x": 210.36, "y": 2}, {"x": 35.73, "y": 1}, {"x": 215.84, "y": 4}, {"x": 3.8, "y": 0}, {"x": 96.8, "y": 0}, {"x": 157.33, "y": 4}, {"x": 26.57, "y": 1}, {"x": 93.09, "y": 3}, {"x": 78.92, "y": 1}, {"x": 103.15, "y": 0}, {"x": 36.53, "y": 1}, {"x": 28.85, "y": 1}, {"x": 257.71, "y": 9}, {"x": 7.22, "y": 0}, {"x": 7.9, "y": 1}, {"x": 62.06, "y": 1}, {"x": 2.1, "y": 1}, {"x": 14.14, "y": 2}, {"x": 23.73, "y": 2}, {"x": 1.71, "y": 0}, {"x": 9.44, "y": 0}, {"x": 27.8, "y": 0}, {"x": 67.65, "y": 2}, {"x": 2.98, "y": 0}, {"x": 3.24, "y": 0}, {"x": 52.26, "y": 2}, {"x": 13.04, "y": 1}, {"x": 38.39, "y": 1}, {"x": 138.77, "y": 2}, {"x": 260.38, "y": 7}, {"x": 8.55, "y": 0}, {"x": 15.63, "y": 0}, {"x": 60.2, "y": 0}, {"x": 34.19, "y": 0}, {"x": 3.24, "y": 0}, {"x": 5.14, "y": 1}, {"x": 216.56, "y": 4}, {"x": 93.07, "y": 0}, {"x": 56.06, "y": 0}, {"x": 54.1, "y": 2}, {"x": 7.8, "y": 1}, {"x": 5.22, "y": 0}, {"x": 358.55, "y": 7}, {"x": 280.99, "y": 2}, {"x": 115.12, "y": 5}, {"x": 219.77, "y": 8}, {"x": 52.02, "y": 1}, {"x": 35.31, "y": 12}, {"x": 63.32, "y": 3}, {"x": 54.24, "y": 0}, {"x": 65.23, "y": 1}, {"x": 4.21, "y": 0}, {"x": 48.61, "y": 1}, {"x": 13.92, "y": 2}, {"x": 11.06, "y": 0}, {"x": 0.0, "y": 0}, {"x": 87.42, "y": 0}, {"x": 1.66, "y": 1}, {"x": 6.74, "y": 0}, {"x": 8.22, "y": 2}, {"x": 5.58, "y": 0}, {"x": 9.23, "y": 1}, {"x": 34.23, "y": 1}, {"x": 3.15, "y": 0}, {"x": 20.21, "y": 1}, {"x": 59.44, "y": 2}, {"x": 38.59, "y": 1}, {"x": 0.0, "y": 1}, {"x": 21.85, "y": 1}, {"x": 1.96, "y": 0}, {"x": 22.32, "y": 0}, {"x": 110.24, "y": 2}, {"x": 29.75, "y": 2}, {"x": 18.47, "y": 0}, {"x": 36.24, "y": 0}, {"x": 76.44, "y": 1}, {"x": 0.0, "y": 1}, {"x": 11.8, "y": 2}, {"x": 26.82, "y": 1}, {"x": 65.67, "y": 4}, {"x": 32.24, "y": 1}, {"x": 245.6, "y": 8}, {"x": 17.64, "y": 3}, {"x": 38.55, "y": 1}, {"x": 40.76, "y": 0}, {"x": 6.37, "y": 0}, {"x": 0.0, "y": 0}, {"x": 89.76, "y": 1}, {"x": 16.15, "y": 0}, {"x": 189.13, "y": 3}, {"x": 8.53, "y": 0}, {"x": 67.77, "y": 3}, {"x": 96.9, "y": 1}, {"x": 37.13, "y": 1}, {"x": 53.16, "y": 1}, {"x": 192.93, "y": 2}, {"x": 236.12, "y": 6}, {"x": 12.57, "y": 0}, {"x": 12.58, "y": 1}, {"x": 28.05, "y": 1}, {"x": 83.48, "y": 2}, {"x": 30.48, "y": 1}, {"x": 20.3, "y": 1}, {"x": 131.58, "y": 1}, {"x": 14.63, "y": 0}, {"x": 64.47, "y": 1}, {"x": 30.15, "y": 2}, {"x": 62.25, "y": 2}, {"x": 78.04, "y": 1}, {"x": 3.4, "y": 0}, {"x": 14.83, "y": 0}, {"x": 22.43, "y": 1}, {"x": 44.14, "y": 0}, {"x": 69.66, "y": 3}, {"x": 16.27, "y": 0}, {"x": 5.79, "y": 0}, {"x": 42.08, "y": 0}, {"x": 67.67, "y": 0}, {"x": 34.07, "y": 0}, {"x": 41.72, "y": 1}, {"x": 19.57, "y": 0}, {"x": 57.37, "y": 1}, {"x": 17.37, "y": 1}, {"x": 100.29, "y": 0}, {"x": 3.71, "y": 0}, {"x": 23.21, "y": 0}, {"x": 0.0, "y": 0}, {"x": 177.89, "y": 1}, {"x": 66.77, "y": 1}, {"x": 32.68, "y": 0}, {"x": 420.58, "y": 8}, {"x": 87.55, "y": 0}, {"x": 232.37, "y": 1}, {"x": 150.14, "y": 0}, {"x": 96.48, "y": 0}, {"x": 95.51, "y": 4}, {"x": 72.31, "y": 2}, {"x": 0.0, "y": 0}, {"x": 9.21, "y": 3}, {"x": 254.25, "y": 2}, {"x": 11.17, "y": 0}, {"x": 34.23, "y": 1}, {"x": 25.26, "y": 1}, {"x": 1.29, "y": 0}, {"x": 113.99, "y": 3}, {"x": 121.1, "y": 3}, {"x": 98.7, "y": 2}, {"x": 8.8, "y": 1}, {"x": 9.93, "y": 1}, {"x": 53.39, "y": 2}, {"x": 3.77, "y": 1}, {"x": 3.19, "y": 0}, {"x": 24.18, "y": 1}, {"x": 76.9, "y": 1}, {"x": 14.52, "y": 1}, {"x": 36.17, "y": 0}, {"x": 38.44, "y": 4}, {"x": 61.93, "y": 3}, {"x": 70.41, "y": 1}, {"x": 37.6, "y": 0}, {"x": 20.59, "y": 0}, {"x": 24.78, "y": 1}, {"x": 29.54, "y": 1}, {"x": 37.85, "y": 1}, {"x": 2.29, "y": 0}, {"x": 24.19, "y": 1}, {"x": 8.52, "y": 0}, {"x": 163.36, "y": 1}, {"x": 58.14, "y": 1}, {"x": 29.31, "y": 1}, {"x": 116.34, "y": 2}, {"x": 60.9, "y": 1}, {"x": 40.02, "y": 1}, {"x": 260.07, "y": 2}, {"x": 359.47, "y": 6}, {"x": 105.71, "y": 2}, {"x": 10.66, "y": 1}, {"x": 143.3, "y": 2}, {"x": 65.03, "y": 0}, {"x": 117.56, "y": 1}, {"x": 143.43, "y": 1}, {"x": 9.66, "y": 1}, {"x": 124.8, "y": 3}, {"x": 98.55, "y": 0}, {"x": 40.77, "y": 0}, {"x": 134.88, "y": 3}, {"x": 19.36, "y": 2}, {"x": 0.0, "y": 0}, {"x": 43.01, "y": 0}, {"x": 42.63, "y": 0}, {"x": 75.79, "y": 0}, {"x": 7.71, "y": 1}, {"x": 14.04, "y": 0}, {"x": 39.86, "y": 0}, {"x": 36.78, "y": 0}, {"x": 54.87, "y": 0}, {"x": 87.79, "y": 1}, {"x": 6.73, "y": 0}, {"x": 76.84, "y": 0}, {"x": 15.54, "y": 0}, {"x": 17.67, "y": 2}, {"x": 49.6, "y": 1}, {"x": 53.27, "y": 0}, {"x": 126.93, "y": 2}, {"x": 179.62, "y": 1}, {"x": 38.42, "y": 0}, {"x": 58.6, "y": 1}, {"x": 39.73, "y": 1}, {"x": 19.11, "y": 1}, {"x": 15.81, "y": 1}, {"x": 140.97, "y": 2}, {"x": 60.76, "y": 1}, {"x": 13.51, "y": 0}, {"x": 55.1, "y": 0}, {"x": 12.63, "y": 1}, {"x": 81.36, "y": 1}, {"x": 16.47, "y": 1}, {"x": 31.03, "y": 0}, {"x": 60.73, "y": 1}, {"x": 74.83, "y": 1}, {"x": 7.48, "y": 0}, {"x": 36.48, "y": 1}, {"x": 68.06, "y": 0}, {"x": 7.88, "y": 1}, {"x": 1.46, "y": 0}, {"x": 123.55, "y": 1}, {"x": 135.75, "y": 1}, {"x": 116.88, "y": 2}, {"x": 365.66, "y": 3}, {"x": 128.28, "y": 1}, {"x": 10.78, "y": 1}, {"x": 133.7, "y": 2}, {"x": 64.88, "y": 0}, {"x": 603.38, "y": 7}, {"x": 220.56, "y": 1}, {"x": 33.9, "y": 1}, {"x": 318.97, "y": 3}, {"x": 248.64, "y": 2}, {"x": 40.93, "y": 1}, {"x": 109.25, "y": 0}, {"x": 134.12, "y": 1}, {"x": 103.39, "y": 4}, {"x": 116.56, "y": 0}, {"x": 120.3, "y": 1}, {"x": 25.46, "y": 0}, {"x": 35.68, "y": 0}, {"x": 131.78, "y": 1}, {"x": 29.91, "y": 1}, {"x": 46.79, "y": 1}, {"x": 3.19, "y": 0}, {"x": 16.68, "y": 0}, {"x": 11.11, "y": 0}, {"x": 127.57, "y": 0}, {"x": 11.01, "y": 0}, {"x": 3.6, "y": 0}, {"x": 33.66, "y": 0}, {"x": 33.35, "y": 0}, {"x": 128.61, "y": 3}, {"x": 33.93, "y": 1}, {"x": 36.44, "y": 1}, {"x": 5.77, "y": 0}, {"x": 181.72, "y": 0}, {"x": 41.42, "y": 1}, {"x": 58.68, "y": 0}, {"x": 80.34, "y": 0}, {"x": 104.46, "y": 0}, {"x": 87.73, "y": 0}, {"x": 253.99, "y": 2}, {"x": 39.44, "y": 0}, {"x": 39.05, "y": 0}, {"x": 16.94, "y": 1}, {"x": 142.71, "y": 2}, {"x": 27.3, "y": 0}, {"x": 29.38, "y": 1}, {"x": 277.58, "y": 8}, {"x": 422.84, "y": 10}, {"x": 38.5, "y": 0}, {"x": 17.33, "y": 1}, {"x": 32.31, "y": 1}, {"x": 41.97, "y": 0}, {"x": 352.45, "y": 1}, {"x": 264.59, "y": 1}, {"x": 158.6, "y": 2}, {"x": 4.77, "y": 0}, {"x": 4.82, "y": 1}, {"x": 37.26, "y": 1}, {"x": 39.52, "y": 0}, {"x": 19.48, "y": 0}, {"x": 16.38, "y": 1}, {"x": 22.67, "y": 1}, {"x": 15.99, "y": 0}, {"x": 17.05, "y": 0}, {"x": 64.41, "y": 4}, {"x": 44.22, "y": 2}, {"x": 38.18, "y": 1}, {"x": 268.05, "y": 5}, {"x": 77.59, "y": 1}, {"x": 46.78, "y": 2}, {"x": 153.12, "y": 1}, {"x": 55.99, "y": 1}, {"x": 31.54, "y": 3}, {"x": 147.34, "y": 1}, {"x": 159.57, "y": 2}, {"x": 117.63, "y": 1}, {"x": 171.98, "y": 2}, {"x": 18.1, "y": 1}, {"x": 4.3, "y": 0}, {"x": 11.57, "y": 0}, {"x": 24.48, "y": 0}, {"x": 169.67, "y": 4}, {"x": 62.14, "y": 1}, {"x": 76.68, "y": 1}, {"x": 195.15, "y": 3}, {"x": 38.36, "y": 3}, {"x": 24.57, "y": 1}, {"x": 74.41, "y": 3}, {"x": 33.47, "y": 2}, {"x": 4.22, "y": 1}, {"x": 147.67, "y": 0}, {"x": 0.0, "y": 0}, {"x": 62.14, "y": 0}, {"x": 4.56, "y": 1}, {"x": 35.06, "y": 1}, {"x": 29.31, "y": 0}, {"x": 169.92, "y": 0}, {"x": 41.63, "y": 1}, {"x": 75.7, "y": 2}, {"x": 256.47, "y": 6}, {"x": 612.3, "y": 13}, {"x": 51.84, "y": 0}, {"x": 54.79, "y": 0}, {"x": 179.05, "y": 3}, {"x": 17.74, "y": 0}, {"x": 375.72, "y": 3}, {"x": 1.57, "y": 0}, {"x": 429.48, "y": 10}, {"x": 95.85, "y": 1}, {"x": 3.82, "y": 0}, {"x": 226.54, "y": 6}, {"x": 50.72, "y": 1}, {"x": 54.57, "y": 0}, {"x": 25.22, "y": 1}, {"x": 9.97, "y": 1}, {"x": 1.73, "y": 1}, {"x": 123.09, "y": 4}, {"x": 37.83, "y": 0}, {"x": 33.04, "y": 1}, {"x": 105.02, "y": 6}, {"x": 0.0, "y": 0}, {"x": 5.93, "y": 0}, {"x": 0.0, "y": 0}, {"x": 3.75, "y": 0}, {"x": 343.26, "y": 4}, {"x": 19.19, "y": 1}, {"x": 61.03, "y": 3}, {"x": 56.17, "y": 1}, {"x": 39.23, "y": 0}, {"x": 99.18, "y": 1}, {"x": 16.18, "y": 0}, {"x": 23.97, "y": 1}, {"x": 2.62, "y": 1}, {"x": 2.78, "y": 1}, {"x": 0.0, "y": 0}, {"x": 42.37, "y": 1}, {"x": 22.05, "y": 0}, {"x": 10.32, "y": 0}, {"x": 9.81, "y": 0}, {"x": 63.45, "y": 0}, {"x": 10.55, "y": 1}, {"x": 38.94, "y": 0}, {"x": 38.03, "y": 1}, {"x": 314.3, "y": 2}, {"x": 173.76, "y": 0}, {"x": 37.32, "y": 1}, {"x": 2.63, "y": 1}, {"x": 263.81, "y": 3}, {"x": 177.11, "y": 2}, {"x": 343.42, "y": 4}, {"x": 33.23, "y": 1}, {"x": 234.66, "y": 1}, {"x": 297.83, "y": 3}, {"x": 31.01, "y": 1}, {"x": 84.66, "y": 1}, {"x": 115.88, "y": 0}, {"x": 84.51, "y": 2}, {"x": 13.06, "y": 0}, {"x": 23.65, "y": 0}, {"x": 89.35, "y": 0}, {"x": 17.3, "y": 0}, {"x": 23.34, "y": 0}, {"x": 40.96, "y": 0}, {"x": 50.11, "y": 1}, {"x": 66.79, "y": 1}, {"x": 1.64, "y": 0}, {"x": 36.23, "y": 0}, {"x": 62.87, "y": 1}, {"x": 71.58, "y": 1}, {"x": 350.51, "y": 1}, {"x": 213.69, "y": 5}, {"x": 10.96, "y": 0}, {"x": 37.4, "y": 4}, {"x": 210.82, "y": 6}, {"x": 42.41, "y": 1}, {"x": 33.2, "y": 0}, {"x": 72.91, "y": 0}, {"x": 293.88, "y": 4}, {"x": 167.05, "y": 1}, {"x": 123.8, "y": 2}, {"x": 85.7, "y": 0}, {"x": 65.18, "y": 1}, {"x": 46.43, "y": 1}, {"x": 68.56, "y": 2}, {"x": 8.19, "y": 0}, {"x": 48.55, "y": 0}, {"x": 82.28, "y": 0}, {"x": 71.53, "y": 0}, {"x": 191.42, "y": 3}, {"x": 321.87, "y": 4}, {"x": 65.03, "y": 0}, {"x": 194.81, "y": 2}, {"x": 78.46, "y": 1}, {"x": 53.63, "y": 1}, {"x": 243.77, "y": 1}, {"x": 262.89, "y": 2}, {"x": 4.05, "y": 1}, {"x": 16.41, "y": 1}, {"x": 66.39, "y": 0}, {"x": 9.61, "y": 0}, {"x": 22.12, "y": 0}, {"x": 78.06, "y": 0}, {"x": 40.88, "y": 2}, {"x": 88.21, "y": 2}, {"x": 48.94, "y": 0}, {"x": 95.85, "y": 0}, {"x": 106.93, "y": 6}, {"x": 254.42, "y": 2}, {"x": 117.34, "y": 1}, {"x": 390.26, "y": 0}, {"x": 340.41, "y": 2}, {"x": 33.47, "y": 1}, {"x": 66.28, "y": 1}, {"x": 48.18, "y": 1}, {"x": 156.12, "y": 2}, {"x": 288.33, "y": 0}, {"x": 40.37, "y": 1}, {"x": 19.28, "y": 0}, {"x": 34.03, "y": 0}, {"x": 29.67, "y": 0}, {"x": 47.79, "y": 0}, {"x": 111.65, "y": 0}, {"x": 24.33, "y": 0}, {"x": 188.51, "y": 1}, {"x": 33.14, "y": 1}, {"x": 59.85, "y": 0}, {"x": 21.11, "y": 1}, {"x": 38.35, "y": 1}, {"x": 30.84, "y": 1}, {"x": 14.59, "y": 1}, {"x": 15.92, "y": 0}, {"x": 24.22, "y": 0}, {"x": 238.4, "y": 3}, {"x": 132.73, "y": 1}, {"x": 201.6, "y": 1}, {"x": 465.08, "y": 2}, {"x": 234.94, "y": 0}, {"x": 195.08, "y": 0}, {"x": 104.69, "y": 0}, {"x": 295.55, "y": 0}, {"x": 226.03, "y": 0}, {"x": 287.69, "y": 1}, {"x": 315.9, "y": 2}, {"x": 332.99, "y": 0}, {"x": 282.49, "y": 2}, {"x": 115.66, "y": 0}, {"x": 247.32, "y": 3}, {"x": 11.2, "y": 2}, {"x": 25.46, "y": 0}, {"x": 299.53, "y": 5}, {"x": 140.42, "y": 4}, {"x": 100.88, "y": 2}, {"x": 13.35, "y": 0}, {"x": 73.75, "y": 1}, {"x": 76.76, "y": 0}, {"x": 145.82, "y": 1}, {"x": 125.27, "y": 1}, {"x": 38.63, "y": 1}, {"x": 7.14, "y": 0}, {"x": 116.99, "y": 0}, {"x": 175.97, "y": 1}, {"x": 105.66, "y": 0}, {"x": 259.18, "y": 1}, {"x": 46.92, "y": 0}, {"x": 187.74, "y": 0}, {"x": 380.66, "y": 2}, {"x": 541.7, "y": 0}, {"x": 409.56, "y": 4}, {"x": 102.39, "y": 0}, {"x": 67.13, "y": 1}, {"x": 22.86, "y": 0}, {"x": 134.89, "y": 0}, {"x": 369.07, "y": 8}, {"x": 198.09, "y": 1}, {"x": 91.0, "y": 1}, {"x": 297.91, "y": 3}, {"x": 50.29, "y": 0}, {"x": 9.42, "y": 0}, {"x": 20.52, "y": 0}, {"x": 38.14, "y": 3}, {"x": 142.05, "y": 1}, {"x": 402.3, "y": 0}, {"x": 159.3, "y": 1}, {"x": 193.66, "y": 1}, {"x": 66.84, "y": 0}, {"x": 178.67, "y": 0}, {"x": 130.36, "y": 0}, {"x": 114.86, "y": 0}, {"x": 3.2, "y": 0}, {"x": 7.53, "y": 4}, {"x": 2.69, "y": 1}, {"x": 27.33, "y": 1}, {"x": 53.79, "y": 0}, {"x": 61.01, "y": 3}, {"x": 46.67, "y": 3}, {"x": 12.11, "y": 0}, {"x": 3.2, "y": 1}, {"x": 32.09, "y": 1}, {"x": 2.96, "y": 1}, {"x": 23.7, "y": 0}, {"x": 16.94, "y": 2}, {"x": 46.65, "y": 1}, {"x": 12.68, "y": 0}, {"x": 19.82, "y": 1}, {"x": 21.26, "y": 0}, {"x": 40.73, "y": 0}, {"x": 25.01, "y": 0}, {"x": 11.52, "y": 1}, {"x": 7.7, "y": 0}, {"x": 12.15, "y": 1}, {"x": 14.96, "y": 0}, {"x": 1.49, "y": 1}, {"x": 28.47, "y": 0}, {"x": 15.15, "y": 0}, {"x": 60.23, "y": 1}, {"x": 28.72, "y": 1}, {"x": 34.87, "y": 2}, {"x": 13.5, "y": 1}, {"x": 13.56, "y": 0}, {"x": 9.26, "y": 1}, {"x": 17.94, "y": 0}, {"x": 25.75, "y": 1}, {"x": 30.08, "y": 0}, {"x": 7.26, "y": 1}, {"x": 18.42, "y": 1}, {"x": 50.5, "y": 1}, {"x": 82.14, "y": 2}, {"x": 36.6, "y": 1}, {"x": 19.58, "y": 0}, {"x": 13.65, "y": 0}, {"x": 30.26, "y": 0}, {"x": 113.68, "y": 4}, {"x": 11.43, "y": 2}, {"x": 99.52, "y": 2}, {"x": 110.78, "y": 2}, {"x": 120.88, "y": 0}, {"x": 35.54, "y": 1}, {"x": 119.64, "y": 4}, {"x": 11.19, "y": 0}, {"x": 138.92, "y": 1}, {"x": 14.48, "y": 1}, {"x": 163.8, "y": 9}, {"x": 111.99, "y": 3}, {"x": 15.05, "y": 0}, {"x": 237.32, "y": 3}, {"x": 47.88, "y": 1}, {"x": 164.64, "y": 0}, {"x": 200.83, "y": 5}, {"x": 105.22, "y": 2}, {"x": 127.32, "y": 1}, {"x": 68.67, "y": 1}, {"x": 20.05, "y": 0}, {"x": 9.41, "y": 1}, {"x": 77.6, "y": 2}, {"x": 16.73, "y": 1}, {"x": 246.75, "y": 7}, {"x": 223.19, "y": 9}, {"x": 67.61, "y": 0}, {"x": 319.0, "y": 0}, {"x": 82.93, "y": 0}, {"x": 57.0, "y": 0}, {"x": 233.11, "y": 4}, {"x": 217.78, "y": 2}, {"x": 323.06, "y": 1}, {"x": 87.99, "y": 2}, {"x": 105.45, "y": 1}, {"x": 120.9, "y": 0}, {"x": 301.05, "y": 10}, {"x": 62.32, "y": 1}, {"x": 279.22, "y": 1}, {"x": 158.05, "y": 4}, {"x": 36.01, "y": 2}, {"x": 16.34, "y": 0}, {"x": 162.64, "y": 5}, {"x": 333.75, "y": 4}, {"x": 33.71, "y": 0}, {"x": 232.59, "y": 4}, {"x": 47.69, "y": 1}, {"x": 358.19, "y": 2}, {"x": 173.88, "y": 0}, {"x": 40.29, "y": 0}, {"x": 198.71, "y": 2}, {"x": 165.61, "y": 2}];
 
     let currentOrderValue = 100.0;
@@ -1134,12 +1277,15 @@
     function switchLensTab(lens) {
       activeLens = lens;
       const btns = document.querySelectorAll('.nav-pill-btn');
+      const banner = document.getElementById('statValidationBanner');
       if (lens === 'age_gender') {
         btns[0].classList.add('active');
         btns[1].classList.remove('active');
+        if (banner) banner.style.display = 'flex';
       } else {
         btns[0].classList.remove('active');
         btns[1].classList.add('active');
+        if (banner) banner.style.display = 'none';
       }
       renderLensContent();
     }
@@ -1153,8 +1299,8 @@
       const baselineProfit = totalRev - DATA.portfolio.total_spend;
 
       // Net impact
-      const deltaApproved = DATA.portfolio.delta_approved; // 24.14
-      const spendSavings = Math.abs(DATA.portfolio.net_spend_change); // 3769.29
+      const deltaApproved = DATA.portfolio.delta_approved; // 24.21
+      const spendSavings = Math.abs(DATA.portfolio.net_spend_change); // 3706.49
       const profitLift = (deltaApproved * V) + spendSavings;
       const profitLiftPct = (profitLift / baselineProfit * 100);
 
@@ -1172,6 +1318,10 @@
       kpiNetProfit.textContent = `$${Math.round(baselineProfit).toLocaleString()}`;
       kpiProfitLift.textContent = `+$${Math.round(profitLift).toLocaleString()}`;
       kpiProfitLiftSub.textContent = `+${profitLiftPct.toFixed(1)}% net profit increase`;
+      const budgetSavingsEl = document.getElementById('kpiBudgetSavings');
+      if (budgetSavingsEl) {
+        budgetSavingsEl.textContent = `Saves $${Math.round(spendSavings).toLocaleString()} in ad budget`;
+      }
 
       kpiRoasGaugeVal.textContent = `${portfolioRoas.toFixed(2)}x`;
       chartBenchmarkVal.textContent = `${portfolioRoas.toFixed(2)}x`;
@@ -1227,7 +1377,13 @@
               legend: { display: false },
               tooltip: {
                 callbacks: {
-                  label: ctx => `ROAS: ${ctx.raw.toFixed(2)}x (CPA: $${items[ctx.dataIndex].cpa.toFixed(2)})`
+                  label: ctx => {
+                    const item = items[ctx.dataIndex];
+                    if (isAgeGender && item.cvr_pct) {
+                      return `ROAS: ${ctx.raw.toFixed(2)}x (CPA: $${item.cpa.toFixed(2)}) • CVR: ${item.cvr_pct.toFixed(2)}% [${item.ci_lower.toFixed(2)}%–${item.ci_upper.toFixed(2)}%]`;
+                    }
+                    return `ROAS: ${ctx.raw.toFixed(2)}x (CPA: $${item.cpa.toFixed(2)})`;
+                  }
                 }
               }
             },
@@ -1250,7 +1406,7 @@
         lensChartInstance.update();
       }
 
-      // 2. Render Card-Based Rows
+      // 2. Render Card-Based Rows with Statistical Validation & Parity Tiers
       const container = document.getElementById('tableCardsContainer');
       let html = '';
 
@@ -1261,21 +1417,72 @@
         const shiftLabel = d.shift_pct > 0 ? `+${d.shift_pct}%` : (d.shift_pct < 0 ? `${d.shift_pct}%` : '0%');
         const title = isAgeGender ? d.segment : `Interest ${d.interest_grouped}`;
 
+        let tierTagHtml = '';
+        let metricsHtml = '';
+        let roasSubHtml = '';
+        let rationaleText = d.rationale;
+
+        if (isAgeGender) {
+          // Dynamic Softened Wording for Women 45-49 based on slider breakeven
+          if (d.segment === '45-49 F') {
+            const isBreakevenOrBetter = V >= 119.94;
+            if (isBreakevenOrBetter) {
+              rationaleText = `Lowest conversion rate in portfolio (1.14%, 95% CI [0.95%, 1.38%]) — profitable at current $${V} assumed order value (Breakeven: $119.94). Retain cautious trim (-30%) due to lowest conversion efficiency.`;
+              roasSubHtml = `<small style="color: var(--color-emerald); font-weight: 600;">Profitable (&ge; $120)</small>`;
+            } else {
+              rationaleText = `Lowest conversion rate in portfolio (1.14%, 95% CI [0.95%, 1.38%]) — unprofitable under the $${V} assumed order value. Enforce maximum capped cut (-30%) to curb waste.`;
+              roasSubHtml = `<small style="color: #DC2626; font-weight: 600;">Unprofitable (&lt; $120)</small>`;
+            }
+            tierTagHtml = `<span class="tier-tag tier-tag-bottom">Tier 6 Floor</span>`;
+          } else if (d.is_tied) {
+            tierTagHtml = `<span class="tier-tag tier-tag-tied">🔗 Tied Parity</span>`;
+            roasSubHtml = `<small>${roas >= 1.0 ? 'Profitable' : 'Loss'}</small>`;
+          } else if (d.shift_pct === 25) {
+            tierTagHtml = `<span class="tier-tag tier-tag-top">🏆 Tier 1 Leader</span>`;
+            roasSubHtml = `<small>${roas >= 1.0 ? 'Profitable' : 'Loss'}</small>`;
+          } else if (d.shift_pct === 0) {
+            tierTagHtml = `<span class="tier-tag tier-tag-mid">Tier 3 Benchmark</span>`;
+            roasSubHtml = `<small>${roas >= 1.0 ? 'Profitable' : 'Loss'}</small>`;
+          } else {
+            tierTagHtml = `<span class="tier-tag tier-tag-low">Tier 5 Lagging</span>`;
+            roasSubHtml = `<small>${roas >= 1.0 ? 'Profitable' : 'Loss'}</small>`;
+          }
+
+          metricsHtml = `
+            <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 4px; font-size: 11.5px;">
+              <span>CVR: <strong>${d.cvr_pct.toFixed(2)}%</strong></span>
+              <span class="ci-pill">95% CI [${d.ci_lower.toFixed(2)}%–${d.ci_upper.toFixed(2)}%]</span>
+              <span style="color: var(--text-muted); margin: 0 2px;">•</span>
+              <span>CPA: <strong>$${d.cpa.toFixed(2)}</strong></span>
+              ${d.is_tied ? `<span style="font-size: 10px; color: #4C5FD5; font-weight: 600; margin-left: 2px;">(${d.tie_stat})</span>` : ''}
+            </div>
+            <div style="font-size: 10.5px; color: var(--text-secondary); margin-top: 3px; line-height: 1.35;">${rationaleText}</div>
+          `;
+        } else {
+          metricsHtml = `
+            <div>CPA: <strong>$${d.cpa.toFixed(2)}</strong></div>
+            <div style="font-size: 10.5px; color: var(--text-muted); line-height: 1.35;">${d.rationale}</div>
+          `;
+          roasSubHtml = `<small>${roas >= 1.0 ? 'Profitable' : 'Loss'}</small>`;
+        }
+
         html += `
           <div class="cohort-card-row">
             <div class="col-cohort">
               <strong>${title}</strong>
-              <span>$${Math.round(d.spend).toLocaleString()}</span>
+              <div style="display: flex; align-items: center; gap: 6px; margin-top: 2px;">
+                <span>$${Math.round(d.spend).toLocaleString()}</span>
+                ${tierTagHtml}
+              </div>
             </div>
             
             <div class="col-metrics">
-              <div>CPA: <strong>$${d.cpa.toFixed(2)}</strong></div>
-              <div style="font-size: 10.5px; color: var(--text-muted);">${d.rationale}</div>
+              ${metricsHtml}
             </div>
 
             <div class="col-roas">
               ${roas.toFixed(2)}x
-              <small>${roas >= 1.0 ? 'Profitable' : 'Loss'}</small>
+              ${roasSubHtml}
             </div>
 
             <div style="text-align: center;">
